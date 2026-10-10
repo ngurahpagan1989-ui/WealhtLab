@@ -164,11 +164,9 @@
               </div>
             </div>
 
-            <!-- 1. Action Bar Terpusat (Toolbar) - Diabaikan saat Cetak PDF -->
+            <!-- 1. Action Bar Terpusat (Toolbar) -->
             <div data-html2canvas-ignore="true" class="bg-slate-50/80 border border-gray-200/80 p-4 rounded-2xl mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xs">
-              <!-- Bagian Kiri/Atas: Kolom Search, Month Picker, & Tombol Semua Waktu -->
               <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-                <!-- Kolom Search (Mencari Hashtag / Kata Kunci) -->
                 <div class="relative flex-1 sm:w-64 min-w-[200px]">
                   <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                   <input 
@@ -188,7 +186,6 @@
                   </button>
                 </div>
 
-                <!-- Month Picker & Tombol Semua Waktu -->
                 <div class="flex items-center gap-2">
                   <input 
                     type="month" 
@@ -209,7 +206,6 @@
                 </div>
               </div>
 
-              <!-- Bagian Kanan/Bawah: Tombol Export Excel & Export PDF -->
               <div class="flex items-center gap-2 self-end lg:self-auto">
                 <button 
                   type="button" 
@@ -228,9 +224,8 @@
               </div>
             </div>
 
-            <!-- 2. Mini HUD (3 Card Ringkasan Dinamis) - Ikut tercetak di PDF -->
+            <!-- 2. Mini HUD (3 Card Ringkasan Dinamis) -->
             <div data-html2canvas-ignore="false" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-              <!-- Card 1: Pemasukan (Hijau) -->
               <div class="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 border border-emerald-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
                 <div>
                   <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -246,7 +241,6 @@
                 </div>
               </div>
 
-              <!-- Card 2: Pengeluaran (Merah) -->
               <div class="bg-gradient-to-br from-rose-50 via-white to-rose-50/40 border border-rose-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
                 <div>
                   <p class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -262,7 +256,6 @@
                 </div>
               </div>
 
-              <!-- Card 3: Arus Kas / Selisih (Teal/Biru) -->
               <div class="bg-gradient-to-br from-teal-50 via-white to-cyan-50/40 border border-teal-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
                 <div>
                   <p class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -279,7 +272,7 @@
               </div>
             </div>
 
-            <!-- 3. Mode Desktop (md:table): Sticky Header, Nominal text-right, Badge Dompet & Kategori -->
+            <!-- 3. Mode Desktop -->
             <div class="hidden md:block overflow-x-auto rounded-xl border border-gray-100 shadow-xs max-h-[600px] overflow-y-auto">
               <table id="tabel-semua-transaksi" class="w-full text-left text-sm whitespace-nowrap">
                 <thead class="text-gray-500 bg-white sticky top-0 z-10 shadow-xs border-b border-gray-200">
@@ -296,7 +289,7 @@
               </table>
             </div>
 
-            <!-- 3. Mode Mobile (md:hidden): Daftar Transaksi Card Bergaya Mutasi Bank -->
+            <!-- 3. Mode Mobile -->
             <div id="mobile-transaction-list" class="flex flex-col gap-3 md:hidden"></div>
           </div>
         </div>
@@ -357,7 +350,6 @@
 
         <!-- VIEW: HUTANG & PIUTANG -->
         <div id="view-hutang" class="view-section hidden space-y-6">
-          <!-- Summary Cards Hutang & Piutang -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-rose-500">
               <div class="flex items-center justify-between">
@@ -383,7 +375,6 @@
             </div>
           </div>
 
-          <!-- Card Form & Tabel Catatan -->
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
               <div>
@@ -394,7 +385,6 @@
               </div>
             </div>
 
-            <!-- Form Input Hutang / Piutang -->
             <div class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 mb-6">
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
                 <div>
@@ -428,7 +418,6 @@
               </div>
             </div>
 
-            <!-- Tabel Riwayat Hutang & Piutang -->
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap border-t border-gray-100">
                 <thead class="text-gray-500 bg-gray-50/80">
@@ -460,7 +449,6 @@
               </div>
             </div>
 
-            <!-- Form Buat Target Tabungan -->
             <div class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 mb-6">
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                 <div>
@@ -483,7 +471,6 @@
               </div>
             </div>
 
-            <!-- Grid Card Target Tabungan -->
             <div id="container-tabungan" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
           </div>
         </div>
@@ -493,21 +480,31 @@
   </main>
 
   <script>
-    // ================= INISIALISASI SUPABASE CLIENT =================
-    const SUPABASE_URL = "https://zvcdismojoqwgczjrqaa.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y2Rpc21vam9xd2djempycWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MTgxOTEsImV4cCI6MjEwNzE5NDE5MX0.8Wprk5Pg1mOGithyv_1QcgxFSuIBs7ynzV1gXuDPGZQ";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     // ================= STATE GLOBAL =================
     let myChart = null;
-    let allTransactions = []; // Menyimpan salinan data transaksi untuk filter real-time
-    let cachedBudgetData = []; // Menyimpan salinan data budget untuk perhitungan interaktif
+    let allTransactions = []; 
+    let cachedBudgetData = []; 
     let cachedHutangData = [];
     let cachedTabunganData = [];
-    let editingBudgetId = null; // Menyimpan ID baris budget yang sedang diedit
-    let isSemuaWaktu = false; // Status toggle filter Semua Waktu
+    let editingBudgetId = null; 
+    let isSemuaWaktu = false; 
 
-    // ================= NOTIFIKASI TOAST (MODERN UI) =================
+    // ================= INISIALISASI SUPABASE KEBAL =================
+    const SUPABASE_URL = "https://zvcdismojoqwgczjrqaa.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y2Rpc21vam9xd2djempycWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MTgxOTEsImV4cCI6MjEwNzE5NDE5MX0.8Wprk5Pg1mOGithyv_1QcgxFSuIBs7ynzV1gXuDPGZQ";
+    
+    let supabase = null;
+    try {
+      if (typeof window.supabase !== 'undefined') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } else {
+        console.warn("Library Supabase terblokir oleh ekstensi browser.");
+      }
+    } catch (err) {
+      console.error("Gagal menyambung ke Supabase:", err);
+    }
+
+    // ================= NOTIFIKASI TOAST =================
     function showToast(message, type = 'success') {
       let container = document.getElementById('toast-container');
       if (!container) {
@@ -549,14 +546,12 @@
     }
 
     // ================= HELPER FORMATTING & UTILITIES =================
-    // Format mata uang Rupiah
     const formatRp = (angka) => {
       let num = parseFloat(String(angka).replace(/[^0-9.-]+/g,""));
       if(isNaN(num)) num = 0;
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
     };
     
-    // Ekstraksi tahun dan bulan (YYYY-MM) dari format tanggal ISO, Sheets, maupun Date object
     function getYearMonth(dateString) {
       if (!dateString) return "";
       if (dateString instanceof Date && !isNaN(dateString.getTime())) {
@@ -565,17 +560,14 @@
         return `${y}-${m}`;
       }
       const str = String(dateString).trim();
-      // Format YYYY-MM-DD atau YYYY-MM
       if (/^\d{4}-\d{1,2}/.test(str)) {
         const parts = str.split('-');
         return `${parts[0]}-${String(parts[1]).padStart(2, '0')}`;
       }
-      // Format YYYY/MM/DD atau YYYY/MM
       if (/^\d{4}\/\d{1,2}/.test(str)) {
         const parts = str.split('/');
         return `${parts[0]}-${String(parts[1]).padStart(2, '0')}`;
       }
-      // Format DD/MM/YYYY
       if (str.includes('/')) {
         const parts = str.split('/');
         if (parts.length === 3) {
@@ -584,7 +576,6 @@
           if (y.length === 4) return `${y}-${m}`;
         }
       }
-      // Format DD-MM-YYYY
       if (str.includes('-')) {
         const parts = str.split('-');
         if (parts.length === 3 && parts[2].trim().length === 4) {
@@ -593,7 +584,6 @@
           if (y.length === 4) return `${y}-${m}`;
         }
       }
-      // Fallback Date parser
       const d = new Date(str);
       if (!isNaN(d.getTime())) {
         const y = d.getFullYear();
@@ -603,7 +593,6 @@
       return "";
     }
 
-    // Format tampilan tanggal ke Bahasa Indonesia (DD MMM YYYY)
     const formatDt = (dateStr) => { 
       if(!dateStr) return '-'; 
       let d = new Date(dateStr); 
@@ -614,7 +603,6 @@
       return isNaN(d) ? dateStr : d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }); 
     };
 
-    // Render hashtag menjadi chip badge Tailwind CSS yang bisa diklik
     function renderHashtags(text) {
       if (!text || text === '-') return '<span class="text-gray-400">-</span>';
       return String(text).replace(/(#[a-zA-Z0-9_\u00C0-\u024F-]+)/g, (match) => {
@@ -622,7 +610,6 @@
       });
     }
 
-    // Badge visual dompet (Pribadi / Bisnis)
     function badgeDompet(dompet) {
       const isBisnis = String(dompet || '').trim().toLowerCase() === 'bisnis';
       if (isBisnis) {
@@ -631,7 +618,6 @@
       return `<span class="inline-flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200/80 px-2 py-0.5 rounded-full text-xs font-semibold shadow-xs"><i class="fas fa-user text-[10px]"></i>Pribadi</span>`;
     }
 
-    // Navigasi Tab SPA
     function switchTab(tabName) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
       document.getElementById('view-' + tabName).classList.remove('hidden');
@@ -654,6 +640,13 @@
     async function refreshAll() {
       const loadingEl = document.getElementById('loading');
       const mainContentEl = document.getElementById('main-content');
+      
+      // Stop the process if Supabase wasn't initialized correctly (due to adblockers)
+      if (!supabase) {
+        if (loadingEl) loadingEl.innerHTML = '<div class="text-rose-500 font-medium p-4 text-center"><i class="fas fa-exclamation-circle text-3xl mb-3 block"></i> Gagal memuat database.<br>Harap matikan ekstensi Adblocker dan <a href="#" onclick="window.location.reload()" class="underline font-bold">Refresh halaman ini</a>.</div>';
+        return;
+      }
+
       if (loadingEl) loadingEl.classList.remove('hidden');
       if (mainContentEl) mainContentEl.classList.add('hidden');
 
@@ -674,63 +667,31 @@
     }
 
     // ================= MODUL 1: TRANSAKSI & DASHBOARD =================
-    // Helper fleksibel: menerima Array of Objects (Supabase) maupun Array of Arrays (Legacy)
     function parseRow(row) {
       if (!row) return null;
-
-      // Dukungan jika row bertipe Array (Sheets format)
       if (Array.isArray(row)) {
         if (!row[0] || !row[3]) return null;
         const rawNominal = String(row[3]).replace(/[^0-9.-]+/g, "");
         const nominal = parseFloat(rawNominal) || 0;
         if (nominal === 0) return null;
-
         const val5 = row[5] ? String(row[5]).trim().toLowerCase() : '';
         const isOldFormat = row.length <= 7 || val5 === 'pengeluaran' || val5 === 'pemasukan';
         const dompet = isOldFormat ? "Pribadi" : (row[5] ? String(row[5]).trim() : "Pribadi");
         const tipe = isOldFormat ? (row[5] ? String(row[5]).trim() : "Pengeluaran") : (row[6] ? String(row[6]).trim() : "Pengeluaran");
         const catatan = isOldFormat ? (row[6] || "-") : (row[7] || "-");
         const isKeluar = String(tipe).trim().toLowerCase() !== 'pemasukan';
-
-        return {
-          id: null,
-          tanggal: row[0],
-          deskripsi: row[1] || "",
-          kategori: row[2] || "",
-          nominal: nominal,
-          metode: row[4] || "-",
-          dompet: dompet,
-          tipe: tipe,
-          catatan: catatan,
-          isKeluar: isKeluar
-        };
+        return { id: null, tanggal: row[0], deskripsi: row[1] || "", kategori: row[2] || "", nominal: nominal, metode: row[4] || "-", dompet: dompet, tipe: tipe, catatan: catatan, isKeluar: isKeluar };
       }
-
-      // Format Object Supabase [{ id, tanggal, deskripsi, kategori, nominal, metode, dompet, tipe, catatan }]
       const rawNominal = String(row.nominal ?? 0).replace(/[^0-9.-]+/g, "");
       const nominal = parseFloat(rawNominal) || 0;
       if (nominal === 0 && !row.deskripsi) return null;
-
       const dompet = row.dompet ? String(row.dompet).trim() : "Pribadi";
       const tipe = row.tipe ? String(row.tipe).trim() : "Pengeluaran";
       const catatan = row.catatan || "-";
       const isKeluar = String(tipe).trim().toLowerCase() !== 'pemasukan';
-
-      return {
-        id: row.id || null,
-        tanggal: row.tanggal || "",
-        deskripsi: row.deskripsi || "",
-        kategori: row.kategori || "",
-        nominal: nominal,
-        metode: row.metode || "-",
-        dompet: dompet,
-        tipe: tipe,
-        catatan: catatan,
-        isKeluar: isKeluar
-      };
+      return { id: row.id || null, tanggal: row.tanggal || "", deskripsi: row.deskripsi || "", kategori: row.kategori || "", nominal: nominal, metode: row.metode || "-", dompet: dompet, tipe: tipe, catatan: catatan, isKeluar: isKeluar };
     }
 
-    // Ambil data transaksi dari Supabase
     async function loadTransaksi() {
       const { data, error } = await supabase
         .from('transaksi')
@@ -745,10 +706,9 @@
       processData(data || []);
     }
 
-    // Memproses data transaksi ke UI Dashboard dan memicu filter
     function processData(data) {
       const rows = data || [];
-      allTransactions = rows; // Simpan ke memori global untuk fitur filter & search
+      allTransactions = rows; 
 
       let tMasuk = 0, tKeluar = 0;
       let masukPribadi = 0, keluarPribadi = 0;
@@ -766,21 +726,13 @@
 
         if (!item.isKeluar) {
           tMasuk += item.nominal;
-          if (item.dompet.toLowerCase() === 'bisnis') {
-            masukBisnis += item.nominal;
-          } else {
-            masukPribadi += item.nominal;
-          }
+          if (item.dompet.toLowerCase() === 'bisnis') masukBisnis += item.nominal;
+          else masukPribadi += item.nominal;
         } else { 
           tKeluar += item.nominal;
-          if (item.dompet.toLowerCase() === 'bisnis') {
-            keluarBisnis += item.nominal;
-          } else {
-            keluarPribadi += item.nominal;
-          }
-          if (item.kategori) {
-            catData[item.kategori] = (catData[item.kategori] || 0) + item.nominal;
-          }
+          if (item.dompet.toLowerCase() === 'bisnis') keluarBisnis += item.nominal;
+          else keluarPribadi += item.nominal;
+          if (item.kategori) catData[item.kategori] = (catData[item.kategori] || 0) + item.nominal;
         }
         
         const w = item.isKeluar ? 'text-red-500' : 'text-emerald-500'; 
@@ -802,7 +754,6 @@
         tDash.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-sm">Belum ada riwayat transaksi tercatat.</td></tr>`;
       }
       
-      // Update Nilai Ringkasan Dashboard
       document.getElementById('total-masuk').innerText = formatRp(tMasuk); 
       document.getElementById('total-keluar').innerText = formatRp(tKeluar); 
       
@@ -825,38 +776,26 @@
       if (elKeluarBisnis) elKeluarBisnis.innerText = formatRp(keluarBisnis);
 
       renderChart(catData);
-
-      // Render tabel transaksi dengan filter yang sedang aktif
       filterTransaksi();
-      if (cachedBudgetData && cachedBudgetData.length > 0) {
-        tampilkanBudget(cachedBudgetData);
-      }
+      if (cachedBudgetData && cachedBudgetData.length > 0) tampilkanBudget(cachedBudgetData);
     }
 
-    // Handler klik tombol Semua Waktu
     function setSemuaWaktu() {
       isSemuaWaktu = !isSemuaWaktu;
       const elBulan = document.getElementById('filter-bulan');
-      if (isSemuaWaktu && elBulan) {
-        elBulan.value = '';
-      }
+      if (isSemuaWaktu && elBulan) elBulan.value = '';
       updateSemuaWaktuBtnUI();
       filterTransaksi();
     }
 
-    // Handler saat nilai filter bulan diubah
     function onFilterBulanChange() {
       const elBulan = document.getElementById('filter-bulan');
-      if (elBulan && elBulan.value) {
-        isSemuaWaktu = false;
-      } else {
-        isSemuaWaktu = true;
-      }
+      if (elBulan && elBulan.value) isSemuaWaktu = false;
+      else isSemuaWaktu = true;
       updateSemuaWaktuBtnUI();
       filterTransaksi();
     }
 
-    // Update tampilan tombol Semua Waktu (aktif / non-aktif)
     function updateSemuaWaktuBtnUI() {
       const btn = document.getElementById('btn-semua-waktu');
       if (!btn) return;
@@ -869,7 +808,6 @@
       }
     }
 
-    // Filter real-time transaksi & kalkulasi Mini HUD
     function filterTransaksi() {
       const searchInput = document.getElementById('search-tag');
       const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
@@ -888,25 +826,20 @@
         bulanInput.value = `${curY}-${curM}`;
       }
 
-      const selectedMonth = (bulanInput ? bulanInput.value : '').trim(); // Format YYYY-MM
+      const selectedMonth = (bulanInput ? bulanInput.value : '').trim();
       const useMonthFilter = !isSemuaWaktu && selectedMonth !== '';
 
-      let filterMasuk = 0;
-      let filterKeluar = 0;
+      let filterMasuk = 0, filterKeluar = 0;
 
       const filtered = allTransactions.filter(row => {
         const item = parseRow(row);
         if (!item) return false;
 
-        // 1. Filter Waktu / Rentang Bulan
         if (useMonthFilter) {
           const itemYearMonth = getYearMonth(item.tanggal);
-          if (itemYearMonth !== selectedMonth) {
-            return false;
-          }
+          if (itemYearMonth !== selectedMonth) return false;
         }
 
-        // 2. Filter Pencarian / Hashtag / Kata Kunci
         if (query) {
           const deskripsi = String(item.deskripsi).toLowerCase();
           const kategori = String(item.kategori).toLowerCase();
@@ -916,17 +849,12 @@
           if (!matchQuery) return false;
         }
 
-        // Akumulasi total untuk 3 Card Mini HUD
-        if (!item.isKeluar) {
-          filterMasuk += item.nominal;
-        } else {
-          filterKeluar += item.nominal;
-        }
+        if (!item.isKeluar) filterMasuk += item.nominal;
+        else filterKeluar += item.nominal;
 
         return true;
       });
 
-      // Update 3 Card Mini HUD secara real-time
       const saldoBersih = filterMasuk - filterKeluar;
       const elMasuk = document.getElementById('filter-total-masuk');
       const elKeluar = document.getElementById('filter-total-keluar');
@@ -936,37 +864,26 @@
       if (elKeluar) elKeluar.innerText = formatRp(filterKeluar);
       if (elSaldo) {
         elSaldo.innerText = (saldoBersih < 0 ? '-' : '') + formatRp(Math.abs(saldoBersih));
-        if (saldoBersih < 0) {
-          elSaldo.className = "text-xl lg:text-2xl font-black text-rose-600";
-        } else {
-          elSaldo.className = "text-xl lg:text-2xl font-black text-teal-700";
-        }
+        if (saldoBersih < 0) elSaldo.className = "text-xl lg:text-2xl font-black text-rose-600";
+        else elSaldo.className = "text-xl lg:text-2xl font-black text-teal-700";
       }
 
-      // Render tabel desktop & mobile cards
       renderTabelSemua(filtered);
     }
 
-    // Memisahkan teks catatan asli dan URL struk digital [STRUK]
     function parseCatatanDanStruk(catatanRaw) {
-      if (!catatanRaw || catatanRaw === '-') {
-        return { text: '-', strukUrl: null };
-      }
-
+      if (!catatanRaw || catatanRaw === '-') return { text: '-', strukUrl: null };
       const strukTag = "[STRUK]";
       if (String(catatanRaw).includes(strukTag)) {
         const parts = String(catatanRaw).split(strukTag);
         let cleanText = parts[0].replace(/\|\s*$/, '').trim();
         const strukUrl = parts[1] ? parts[1].trim() : null;
-
         if (!cleanText) cleanText = '-';
         return { text: cleanText, strukUrl: strukUrl };
       }
-
       return { text: catatanRaw, strukUrl: null };
     }
 
-    // Render baris transaksi: desktop sticky table & mobile card list
     function renderTabelSemua(dataList) {
       const tSemua = document.getElementById('tbody-semua');
       const mList = document.getElementById('mobile-transaction-list');
@@ -974,10 +891,8 @@
       if (mList) mList.innerHTML = '';
 
       if (!dataList || dataList.length === 0) {
-        const emptyHtmlDesktop = `<tr><td colspan="6" class="text-center py-10 text-gray-400 text-sm"><i class="fas fa-search mb-2 text-2xl block text-gray-300"></i>Tidak ada transaksi yang cocok dengan filter.</td></tr>`;
-        const emptyHtmlMobile = `<div class="text-center py-10 text-gray-400 text-sm bg-white rounded-2xl border border-gray-100 p-6 shadow-xs"><i class="fas fa-search mb-2 text-2xl block text-gray-300"></i>Tidak ada transaksi yang cocok dengan filter.</div>`;
-        if (tSemua) tSemua.innerHTML = emptyHtmlDesktop;
-        if (mList) mList.innerHTML = emptyHtmlMobile;
+        if (tSemua) tSemua.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-400 text-sm"><i class="fas fa-search mb-2 text-2xl block text-gray-300"></i>Tidak ada transaksi yang cocok.</td></tr>`;
+        if (mList) mList.innerHTML = `<div class="text-center py-10 text-gray-400 text-sm bg-white rounded-2xl border border-gray-100 p-6 shadow-xs"><i class="fas fa-search mb-2 text-2xl block text-gray-300"></i>Tidak ada transaksi yang cocok.</div>`;
         return;
       }
 
@@ -993,27 +908,19 @@
         const nominalText = `${isKeluar ? '-' : '+'}${formatRp(item.nominal)}`;
         const parsedCatatan = parseCatatanDanStruk(item.catatan);
 
-        // Catatan HTML untuk Desktop
         let catatanHtmlDesktop = '';
-        if (parsedCatatan.text !== '-') {
-          catatanHtmlDesktop += `<span class="mr-2 text-gray-700">${renderHashtags(parsedCatatan.text)}</span>`;
-        }
+        if (parsedCatatan.text !== '-') catatanHtmlDesktop += `<span class="mr-2 text-gray-700">${renderHashtags(parsedCatatan.text)}</span>`;
         if (parsedCatatan.strukUrl) {
           catatanHtmlDesktop += `
-            <a href="${parsedCatatan.strukUrl}" target="_blank" rel="noopener noreferrer" 
-               class="inline-flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-medium px-2 py-0.5 rounded-lg transition shadow-xs" 
-               title="Buka struk digital">
-              <i class="fas fa-image text-indigo-500 text-[10px]"></i>
-              <span>Struk</span>
+            <a href="${parsedCatatan.strukUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-medium px-2 py-0.5 rounded-lg transition shadow-xs" title="Buka struk digital">
+              <i class="fas fa-image text-indigo-500 text-[10px]"></i><span>Struk</span>
             </a>`;
         } else if (parsedCatatan.text === '-') {
           catatanHtmlDesktop = '<span class="text-gray-400">-</span>';
         }
 
-        // Badge Kategori Desktop & Mobile
         const badgeKategori = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-700 border border-teal-200/60">${item.kategori || '-'}</span>`;
 
-        // Render Baris Desktop
         desktopRows += `
           <tr class="hover:bg-slate-50/80 transition">
             <td class="px-4 py-3.5 text-xs text-gray-600">${formatDt(item.tanggal)}</td>
@@ -1024,21 +931,15 @@
             <td class="px-4 py-3.5 text-right font-bold ${colorClass}">${nominalText}</td>
           </tr>`;
 
-        // Catatan HTML untuk Mobile
         let catatanHtmlMobile = '';
         if (parsedCatatan.text !== '-' || parsedCatatan.strukUrl) {
           catatanHtmlMobile = `
             <div class="mt-2 pt-2 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2 text-xs">
               <div class="text-gray-600 truncate max-w-[200px] sm:max-w-xs">${parsedCatatan.text !== '-' ? renderHashtags(parsedCatatan.text) : ''}</div>
-              ${parsedCatatan.strukUrl ? `
-                <a href="${parsedCatatan.strukUrl}" target="_blank" rel="noopener noreferrer" 
-                   class="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-medium px-2 py-0.5 rounded-lg shadow-xs">
-                  <i class="fas fa-image text-indigo-500"></i> Struk
-                </a>` : ''}
+              ${parsedCatatan.strukUrl ? `<a href="${parsedCatatan.strukUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-medium px-2 py-0.5 rounded-lg shadow-xs"><i class="fas fa-image text-indigo-500"></i> Struk</a>` : ''}
             </div>`;
         }
 
-        // Render Card Mobile Banking
         mobileCards += `
           <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition">
             <div class="flex items-start justify-between gap-3">
@@ -1095,11 +996,7 @@
         return;
       }
       const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const filename = `Laporan_Keuangan_${year}-${month}-${day}.xlsx`;
-
+      const filename = `Laporan_Keuangan_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
       const wb = XLSX.utils.table_to_book(table, { sheet: "Laporan Transaksi" });
       XLSX.writeFile(wb, filename);
       showToast("Laporan Excel berhasil diunduh!", "success");
@@ -1112,11 +1009,7 @@
         return;
       }
       const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const filename = `Laporan_Keuangan_${year}-${month}-${day}.pdf`;
-
+      const filename = `Laporan_Keuangan_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.pdf`;
       const opt = {
         margin: [10, 10, 10, 10],
         filename: filename,
@@ -1140,8 +1033,7 @@
 
       allTransactions.forEach((row) => {
         const item = parseRow(row);
-        if (!item || !item.tanggal || item.nominal === 0) return;
-        if (!item.isKeluar) return;
+        if (!item || !item.tanggal || item.nominal === 0 || !item.isKeluar) return;
 
         let d = new Date(item.tanggal);
         if (isNaN(d)) {
@@ -1154,18 +1046,12 @@
           result[kat] = (result[kat] || 0) + item.nominal;
         }
       });
-
       return result;
     }
 
     async function loadBudget() {
-      const { data, error } = await supabase
-        .from('budget')
-        .select('*')
-        .order('kategori', { ascending: true });
-
+      const { data, error } = await supabase.from('budget').select('*').order('kategori', { ascending: true });
       if (error) {
-        console.error('Gagal memuat budget:', error);
         showToast('Gagal memuat budget: ' + error.message, 'error');
         return;
       }
@@ -1199,18 +1085,11 @@
         const persentase = limRaw > 0 ? (terpakai / limRaw) * 100 : 0;
         const widthPercent = Math.min(Math.max(persentase, 0), 100);
 
-        let colorBar = "bg-teal-500";
-        let colorText = "text-teal-700";
-        let statusBadge = `<span class="bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full text-xs font-medium">Aman</span>`;
-
+        let colorBar = "bg-teal-500", colorText = "text-teal-700", statusBadge = `<span class="bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full text-xs font-medium">Aman</span>`;
         if (persentase >= 100) {
-          colorBar = "bg-red-500";
-          colorText = "text-red-600";
-          statusBadge = `<span class="bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded-full text-xs font-semibold">Over Budget!</span>`;
+          colorBar = "bg-red-500"; colorText = "text-red-600"; statusBadge = `<span class="bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded-full text-xs font-semibold">Over Budget!</span>`;
         } else if (persentase >= threshold) {
-          colorBar = "bg-amber-500";
-          colorText = "text-amber-600";
-          statusBadge = `<span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold">Mendekati Limit</span>`;
+          colorBar = "bg-amber-500"; colorText = "text-amber-600"; statusBadge = `<span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold">Mendekati Limit</span>`;
         }
 
         const escapedKat = kat.replace(/'/g, "\\'");
@@ -1218,37 +1097,11 @@
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition border-b border-gray-100">
-            <td class="px-4 py-4 font-semibold text-gray-800">
-              <div>${kat}</div>
-              <div class="mt-1">${statusBadge}</div>
-            </td>
-            <td class="px-4 py-4">
-              <div class="w-48 sm:w-60">
-                <div class="flex justify-between text-xs font-medium mb-1.5">
-                  <span class="${colorText} font-bold">${formatRp(terpakai)}</span>
-                  <span class="${colorText} font-bold">${persentase.toFixed(1)}%</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                  <div class="${colorBar} h-2.5 rounded-full transition-all duration-500" style="width: ${widthPercent}%"></div>
-                </div>
-              </div>
-            </td>
+            <td class="px-4 py-4 font-semibold text-gray-800"><div>${kat}</div><div class="mt-1">${statusBadge}</div></td>
+            <td class="px-4 py-4"><div class="w-48 sm:w-60"><div class="flex justify-between text-xs font-medium mb-1.5"><span class="${colorText} font-bold">${formatRp(terpakai)}</span><span class="${colorText} font-bold">${persentase.toFixed(1)}%</span></div><div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden"><div class="${colorBar} h-2.5 rounded-full transition-all duration-500" style="width: ${widthPercent}%"></div></div></div></td>
             <td class="px-4 py-4 text-right font-bold text-gray-700">${formatRp(limRaw)}</td>
             <td class="px-4 py-4 text-center font-medium text-gray-500">${threshold}%</td>
-            <td class="px-4 py-4 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="editBudget('${escapedKat}', ${limRaw}, ${threshold}, ${idParam})" 
-                        class="p-2 text-blue-600 hover:bg-blue-50 active:bg-blue-100 rounded-lg transition" 
-                        title="Edit Budget">
-                  <i class="fas fa-pencil-alt"></i>
-                </button>
-                <button onclick="hapusBudget('${escapedKat}', ${idParam})" 
-                        class="p-2 text-red-600 hover:bg-red-50 active:bg-red-100 rounded-lg transition" 
-                        title="Hapus Budget">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </div>
-            </td>
+            <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-1.5"><button onclick="editBudget('${escapedKat}', ${limRaw}, ${threshold}, ${idParam})" class="p-2 text-blue-600 hover:bg-blue-50 active:bg-blue-100 rounded-lg transition" title="Edit Budget"><i class="fas fa-pencil-alt"></i></button><button onclick="hapusBudget('${escapedKat}', ${idParam})" class="p-2 text-red-600 hover:bg-red-50 active:bg-red-100 rounded-lg transition" title="Hapus Budget"><i class="fas fa-trash-alt"></i></button></div></td>
           </tr>`;
       });
     }
@@ -1258,11 +1111,8 @@
       document.getElementById('input-kategori').value = kategori;
       document.getElementById('input-limit').value = limit;
       document.getElementById('input-threshold').value = threshold || 80;
-      
       document.getElementById('btn-simpan-text').innerText = "Perbarui Budget";
-      const btnBatal = document.getElementById('btn-batal-budget');
-      if (btnBatal) btnBatal.classList.remove('hidden');
-
+      document.getElementById('btn-batal-budget').classList.remove('hidden');
       document.getElementById('input-limit').focus();
     }
 
@@ -1272,121 +1122,55 @@
       document.getElementById('input-limit').value = '';
       document.getElementById('input-threshold').value = '80';
       document.getElementById('btn-simpan-text').innerText = "Simpan Budget";
-      const btnBatal = document.getElementById('btn-batal-budget');
-      if (btnBatal) btnBatal.classList.add('hidden');
+      document.getElementById('btn-batal-budget').classList.add('hidden');
     }
 
     async function simpanBudget() {
-      const catInput = document.getElementById('input-kategori');
-      const limInput = document.getElementById('input-limit');
-      const thInput = document.getElementById('input-threshold');
+      const cat = document.getElementById('input-kategori').value.trim();
+      const lim = document.getElementById('input-limit').value.trim();
+      const th = document.getElementById('input-threshold').value.trim() || '80';
       const btn = document.getElementById('btn-simpan');
       const btnText = document.getElementById('btn-simpan-text');
 
-      const cat = catInput.value.trim();
-      const lim = limInput.value.trim();
-      const th = thInput.value.trim() || '80';
-
-      if (!cat || !lim) {
-        showToast("Mohon isi nama kategori dan nominal limitnya!", "warning");
-        return;
-      }
-
-      btn.disabled = true;
-      btnText.innerText = "Menyimpan...";
+      if (!cat || !lim) return showToast("Mohon isi nama kategori dan nominal limitnya!", "warning");
+      btn.disabled = true; btnText.innerText = "Menyimpan...";
 
       try {
         if (editingBudgetId) {
-          const { error } = await supabase
-            .from('budget')
-            .update({
-              kategori: cat,
-              limit_nominal: Number(lim),
-              threshold: Number(th)
-            })
-            .eq('id', editingBudgetId);
-
-          if (error) throw error;
-          showToast(`✅ Budget kategori "${cat}" berhasil diperbarui!`, "success");
+          await supabase.from('budget').update({ kategori: cat, limit_nominal: Number(lim), threshold: Number(th) }).eq('id', editingBudgetId);
         } else {
-          // Periksa apakah kategori sudah pernah ada
-          const { data: existing } = await supabase
-            .from('budget')
-            .select('id')
-            .ilike('kategori', cat)
-            .maybeSingle();
-
-          if (existing) {
-            const { error } = await supabase
-              .from('budget')
-              .update({
-                limit_nominal: Number(lim),
-                threshold: Number(th)
-              })
-              .eq('id', existing.id);
-            if (error) throw error;
-            showToast(`✅ Budget kategori "${cat}" berhasil diperbarui!`, "success");
-          } else {
-            const { error } = await supabase
-              .from('budget')
-              .insert([{
-                kategori: cat,
-                limit_nominal: Number(lim),
-                threshold: Number(th)
-              }]);
-            if (error) throw error;
-            showToast(`✅ Budget kategori "${cat}" berhasil disimpan!`, "success");
-          }
+          const { data: existing } = await supabase.from('budget').select('id').ilike('kategori', cat).maybeSingle();
+          if (existing) await supabase.from('budget').update({ limit_nominal: Number(lim), threshold: Number(th) }).eq('id', existing.id);
+          else await supabase.from('budget').insert([{ kategori: cat, limit_nominal: Number(lim), threshold: Number(th) }]);
         }
-
+        showToast(`✅ Budget kategori "${cat}" berhasil disimpan!`, "success");
         batalEditBudget();
         await loadBudget();
       } catch (err) {
-        console.error('Error simpan budget:', err);
         showToast("Gagal menyimpan budget: " + (err.message || err), "error");
       } finally {
-        btn.disabled = false;
-        btnText.innerText = "Simpan Budget";
+        btn.disabled = false; btnText.innerText = "Simpan Budget";
       }
     }
 
     async function hapusBudget(kategori, id) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus limit budget untuk kategori "${kategori}"?`)) {
-        return;
-      }
-
+      if (!confirm(`Apakah Anda yakin ingin menghapus limit budget untuk kategori "${kategori}"?`)) return;
       try {
         let query = supabase.from('budget').delete();
-        if (id && id !== 'null') {
-          query = query.eq('id', id);
-        } else {
-          query = query.ilike('kategori', kategori);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
+        if (id && id !== 'null') query = query.eq('id', id); else query = query.ilike('kategori', kategori);
+        await query;
         showToast(`🗑️ Budget kategori "${kategori}" berhasil dihapus!`, "success");
         batalEditBudget();
         await loadBudget();
       } catch (err) {
-        console.error('Error hapus budget:', err);
         showToast("Gagal menghapus budget: " + (err.message || err), "error");
       }
     }
 
     // ================= MODUL 3: HUTANG & PIUTANG =================
     async function loadHutangPiutang() {
-      const { data, error } = await supabase
-        .from('hutang_piutang')
-        .select('*')
-        .order('tanggal', { ascending: false });
-
-      if (error) {
-        console.error('Gagal memuat hutang & piutang:', error);
-        showToast('Gagal memuat hutang & piutang: ' + error.message, 'error');
-        return;
-      }
+      const { data, error } = await supabase.from('hutang_piutang').select('*').order('tanggal', { ascending: false });
+      if (error) return showToast('Gagal memuat hutang & piutang: ' + error.message, 'error');
       tampilkanHutangPiutang(data || []);
     }
 
@@ -1396,18 +1180,14 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      let totalHutangBelum = 0;
-      let totalPiutangBelum = 0;
-
+      let totalHutangBelum = 0, totalPiutangBelum = 0;
       const tglInput = document.getElementById('input-hp-tanggal');
-      if (tglInput && !tglInput.value) {
-        tglInput.value = new Date().toISOString().split('T')[0];
-      }
+      if (tglInput && !tglInput.value) tglInput.value = new Date().toISOString().split('T')[0];
 
       if (!data || data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-gray-400 text-sm"><i class="fas fa-hand-holding-usd mb-2 text-xl block"></i>Belum ada catatan hutang atau piutang.</td></tr>';
-        const elH = document.getElementById('total-hutang'); if (elH) elH.innerText = formatRp(0);
-        const elP = document.getElementById('total-piutang'); if (elP) elP.innerText = formatRp(0);
+        document.getElementById('total-hutang').innerText = formatRp(0);
+        document.getElementById('total-piutang').innerText = formatRp(0);
         return;
       }
 
@@ -1418,10 +1198,8 @@
         if (!nama || nama.toLowerCase() === 'nama') return;
 
         const tipe = String(row.tipe ?? row[2] ?? 'Hutang').trim();
-        const rawNominal = row.nominal ?? row[3] ?? 0;
-        const nominal = parseFloat(String(rawNominal).replace(/[^0-9.-]+/g, "")) || 0;
+        const nominal = parseFloat(String(row.nominal ?? row[3] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
         const status = String(row.status ?? row[4] ?? 'Belum Lunas').trim();
-        const keterangan = row.keterangan ?? row[5] ?? '-';
         const isLunas = status.toLowerCase() === 'lunas';
 
         if (!isLunas) {
@@ -1430,24 +1208,9 @@
         }
 
         const isHutang = tipe.toLowerCase() === 'hutang';
-        const badgeTipe = isHutang 
-          ? `<span class="bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">Hutang</span>`
-          : `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">Piutang</span>`;
-        
-        const badgeStatus = isLunas
-          ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold inline-flex items-center gap-1"><i class="fas fa-check-circle"></i> Lunas</span>`
-          : `<span class="bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold inline-flex items-center gap-1"><i class="fas fa-clock"></i> Belum Lunas</span>`;
-
-        const escapedNama = nama.replace(/'/g, "\\'");
-        const idParam = id ? `'${id}'` : 'null';
-
-        const btnLunas = !isLunas 
-          ? `<button onclick="tandaiLunasHutang(${idParam}, '${escapedNama}')" 
-                     class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-medium px-2.5 py-1 rounded-lg transition shadow-sm" 
-                     title="Tandai Sudah Lunas">
-               <i class="fas fa-check"></i> <span>Tandai Lunas</span>
-             </button>`
-          : `<span class="text-gray-400 text-xs italic">Selesai</span>`;
+        const badgeTipe = isHutang ? `<span class="bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">Hutang</span>` : `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold">Piutang</span>`;
+        const badgeStatus = isLunas ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold inline-flex items-center gap-1"><i class="fas fa-check-circle"></i> Lunas</span>` : `<span class="bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold inline-flex items-center gap-1"><i class="fas fa-clock"></i> Belum Lunas</span>`;
+        const btnLunas = !isLunas ? `<button onclick="tandaiLunasHutang(${id ? `'${id}'` : 'null'}, '${nama.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-medium px-2.5 py-1 rounded-lg transition shadow-sm" title="Tandai Sudah Lunas"><i class="fas fa-check"></i> <span>Tandai Lunas</span></button>` : `<span class="text-gray-400 text-xs italic">Selesai</span>`;
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition border-b border-gray-100">
@@ -1456,22 +1219,13 @@
             <td class="px-4 py-4 text-center">${badgeTipe}</td>
             <td class="px-4 py-4 text-right font-bold ${isHutang ? 'text-rose-600' : 'text-emerald-600'}">${formatRp(nominal)}</td>
             <td class="px-4 py-4 text-center">${badgeStatus}</td>
-            <td class="px-4 py-4 text-xs text-gray-600">${keterangan}</td>
-            <td class="px-4 py-4 text-center">
-              <div class="flex items-center justify-center gap-2">
-                ${btnLunas}
-                <button onclick="hapusHutang(${idParam}, '${escapedNama}')" 
-                        class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition" 
-                        title="Hapus Catatan">
-                  <i class="fas fa-trash-alt text-xs"></i>
-                </button>
-              </div>
-            </td>
+            <td class="px-4 py-4 text-xs text-gray-600">${row.keterangan ?? row[5] ?? '-'}</td>
+            <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2">${btnLunas}<button onclick="hapusHutang(${id ? `'${id}'` : 'null'}, '${nama.replace(/'/g, "\\'")}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition" title="Hapus Catatan"><i class="fas fa-trash-alt text-xs"></i></button></div></td>
           </tr>`;
       });
 
-      const elH = document.getElementById('total-hutang'); if (elH) elH.innerText = formatRp(totalHutangBelum);
-      const elP = document.getElementById('total-piutang'); if (elP) elP.innerText = formatRp(totalPiutangBelum);
+      document.getElementById('total-hutang').innerText = formatRp(totalHutangBelum);
+      document.getElementById('total-piutang').innerText = formatRp(totalPiutangBelum);
     }
 
     async function simpanHutangPiutang() {
@@ -1483,96 +1237,51 @@
       const btn = document.getElementById('btn-simpan-hp');
       const btnText = document.getElementById('btn-simpan-hp-text');
 
-      if (!nama || !nominal || Number(nominal) <= 0) {
-        showToast("Mohon isi Nama Pihak dan Nominal transaksi yang valid!", "warning");
-        return;
-      }
-
-      btn.disabled = true;
-      btnText.innerText = "Menyimpan...";
+      if (!nama || !nominal || Number(nominal) <= 0) return showToast("Mohon isi Nama Pihak dan Nominal transaksi yang valid!", "warning");
+      btn.disabled = true; btnText.innerText = "Menyimpan...";
 
       try {
-        const { error } = await supabase.from('hutang_piutang').insert([{
-          tanggal: tgl,
-          nama: nama,
-          tipe: tipe,
-          nominal: Number(nominal),
-          status: 'Belum Lunas',
-          keterangan: keterangan
-        }]);
-
-        if (error) throw error;
-
+        await supabase.from('hutang_piutang').insert([{ tanggal: tgl, nama: nama, tipe: tipe, nominal: Number(nominal), status: 'Belum Lunas', keterangan: keterangan }]);
         showToast(`✅ Catatan ${tipe} atas nama "${nama}" berhasil disimpan!`, "success");
-        document.getElementById('input-hp-nama').value = '';
-        document.getElementById('input-hp-nominal').value = '';
-        document.getElementById('input-hp-keterangan').value = '';
+        document.getElementById('input-hp-nama').value = ''; document.getElementById('input-hp-nominal').value = ''; document.getElementById('input-hp-keterangan').value = '';
         await loadHutangPiutang();
       } catch (err) {
-        console.error('Error simpan hutang piutang:', err);
         showToast("Gagal menyimpan catatan: " + (err.message || err), "error");
       } finally {
-        btn.disabled = false;
-        btnText.innerText = "Simpan Catatan";
+        btn.disabled = false; btnText.innerText = "Simpan Catatan";
       }
     }
 
     async function tandaiLunasHutang(id, nama) {
       if (!confirm(`Tandai catatan atas nama "${nama}" sebagai LUNAS?`)) return;
-
       try {
         let query = supabase.from('hutang_piutang').update({ status: 'Lunas' });
-        if (id && id !== 'null') {
-          query = query.eq('id', id);
-        } else {
-          query = query.eq('nama', nama);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
+        if (id && id !== 'null') query = query.eq('id', id); else query = query.eq('nama', nama);
+        await query;
         showToast(`🎉 Catatan atas nama "${nama}" berhasil diubah menjadi Lunas!`, "success");
         await loadHutangPiutang();
       } catch (err) {
-        console.error('Error update status hutang:', err);
         showToast("Gagal update status: " + (err.message || err), "error");
       }
     }
 
     async function hapusHutang(id, nama) {
       if (!confirm(`Hapus catatan atas nama "${nama}"?`)) return;
-
       try {
         let query = supabase.from('hutang_piutang').delete();
-        if (id && id !== 'null') {
-          query = query.eq('id', id);
-        } else {
-          query = query.eq('nama', nama);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
+        if (id && id !== 'null') query = query.eq('id', id); else query = query.eq('nama', nama);
+        await query;
         showToast(`🗑️ Catatan atas nama "${nama}" berhasil dihapus!`, "success");
         await loadHutangPiutang();
       } catch (err) {
-        console.error('Error hapus hutang:', err);
         showToast("Gagal menghapus catatan: " + (err.message || err), "error");
       }
     }
 
     // ================= MODUL 4: TARGET TABUNGAN =================
     async function loadTabungan() {
-      const { data, error } = await supabase
-        .from('tabungan')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Gagal memuat target tabungan:', error);
-        showToast('Gagal memuat target tabungan: ' + error.message, 'error');
-        return;
-      }
+      const { data, error } = await supabase.from('tabungan').select('*').order('created_at', { ascending: true });
+      if (error) return showToast('Gagal memuat target tabungan: ' + error.message, 'error');
       tampilkanTabungan(data || []);
     }
 
@@ -1592,181 +1301,92 @@
         const tujuan = String(row.tujuan ?? row[0] ?? '').trim();
         if (!tujuan || tujuan.toLowerCase() === 'tujuan') return;
 
-        const rawTarget = row.target_nominal ?? row[1] ?? 0;
-        const target = parseFloat(String(rawTarget).replace(/[^0-9.-]+/g, "")) || 0;
-        const rawTerkumpul = row.terkumpul ?? row[2] ?? 0;
-        const terkumpul = parseFloat(String(rawTerkumpul).replace(/[^0-9.-]+/g, "")) || 0;
+        const target = parseFloat(String(row.target_nominal ?? row[1] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
+        const terkumpul = parseFloat(String(row.terkumpul ?? row[2] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
         const persentase = target > 0 ? (terkumpul / target) * 100 : 0;
         const widthPercent = Math.min(Math.max(persentase, 0), 100);
         const isTercapai = persentase >= 100;
-
-        const escapedTujuan = tujuan.replace(/'/g, "\\'");
         const idParam = id ? `'${id}'` : 'null';
 
         container.innerHTML += `
           <div class="bg-gradient-to-br from-white to-slate-50 border border-gray-100 p-6 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col justify-between">
             <div>
               <div class="flex items-start justify-between gap-2 mb-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl ${isTercapai ? 'bg-amber-100 text-amber-600' : 'bg-teal-100 text-teal-600'} flex items-center justify-center font-bold text-lg shadow-inner">
-                    <i class="fas ${isTercapai ? 'fa-trophy' : 'fa-piggy-bank'}"></i>
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-gray-800 text-base">${tujuan}</h4>
-                    <span class="text-xs text-gray-500">Target: ${formatRp(target)}</span>
-                  </div>
-                </div>
-                <button onclick="hapusTargetTabungan(${idParam}, '${escapedTujuan}')" class="text-gray-400 hover:text-red-500 p-1 transition" title="Hapus Target">
-                  <i class="fas fa-trash-alt text-sm"></i>
-                </button>
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl ${isTercapai ? 'bg-amber-100 text-amber-600' : 'bg-teal-100 text-teal-600'} flex items-center justify-center font-bold text-lg shadow-inner"><i class="fas ${isTercapai ? 'fa-trophy' : 'fa-piggy-bank'}"></i></div><div><h4 class="font-bold text-gray-800 text-base">${tujuan}</h4><span class="text-xs text-gray-500">Target: ${formatRp(target)}</span></div></div>
+                <button onclick="hapusTargetTabungan(${idParam}, '${tujuan.replace(/'/g, "\\'")}')" class="text-gray-400 hover:text-red-500 p-1 transition" title="Hapus Target"><i class="fas fa-trash-alt text-sm"></i></button>
               </div>
-
-              <!-- Angka Terkumpul & Persentase -->
-              <div class="mb-3">
-                <div class="flex justify-between items-baseline mb-1.5">
-                  <span class="text-2xl font-black ${isTercapai ? 'text-emerald-600' : 'text-teal-700'}">${formatRp(terkumpul)}</span>
-                  <span class="text-xs font-bold ${isTercapai ? 'text-emerald-600' : 'text-teal-600'}">${persentase.toFixed(1)}%</span>
-                </div>
-                <!-- Visual Progress Bar -->
-                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <div class="${isTercapai ? 'bg-emerald-500' : 'bg-teal-500'} h-3 rounded-full transition-all duration-500" style="width: ${widthPercent}%"></div>
-                </div>
-              </div>
-
+              <div class="mb-3"><div class="flex justify-between items-baseline mb-1.5"><span class="text-2xl font-black ${isTercapai ? 'text-emerald-600' : 'text-teal-700'}">${formatRp(terkumpul)}</span><span class="text-xs font-bold ${isTercapai ? 'text-emerald-600' : 'text-teal-600'}">${persentase.toFixed(1)}%</span></div><div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden"><div class="${isTercapai ? 'bg-emerald-500' : 'bg-teal-500'} h-3 rounded-full transition-all duration-500" style="width: ${widthPercent}%"></div></div></div>
               ${isTercapai ? '<div class="bg-emerald-50 text-emerald-700 text-xs font-bold py-1.5 px-3 rounded-xl mb-4 text-center border border-emerald-200">🎉 Target Tabungan Tercapai!</div>' : ''}
             </div>
-
-            <!-- Form Input Setoran Cepat -->
             <div class="pt-4 border-t border-gray-100 mt-2">
               <label class="block text-xs font-semibold text-gray-600 mb-1.5"><i class="fas fa-coins text-amber-500 mr-1"></i>Input Setoran</label>
-              <div class="flex gap-2">
-                <input type="number" id="input-setor-${index}" placeholder="Nominal Rp" class="border border-gray-300 p-2 rounded-xl w-full text-xs focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                <button type="button" onclick="setorTabungan(${idParam}, '${escapedTujuan}', 'input-setor-${index}', ${terkumpul})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap shadow-sm">
-                  Setor
-                </button>
-              </div>
+              <div class="flex gap-2"><input type="number" id="input-setor-${index}" placeholder="Nominal Rp" class="border border-gray-300 p-2 rounded-xl w-full text-xs focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"><button type="button" onclick="setorTabungan(${idParam}, '${tujuan.replace(/'/g, "\\'")}', 'input-setor-${index}', ${terkumpul})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap shadow-sm">Setor</button></div>
             </div>
           </div>`;
       });
     }
 
     async function simpanTargetTabungan() {
-      const tujuanInput = document.getElementById('input-tabungan-tujuan');
-      const targetInput = document.getElementById('input-tabungan-target');
-      const awalInput = document.getElementById('input-tabungan-awal');
+      const tujuan = document.getElementById('input-tabungan-tujuan').value.trim();
+      const target = Number(document.getElementById('input-tabungan-target').value) || 0;
+      const awal = Number(document.getElementById('input-tabungan-awal').value) || 0;
       const btn = document.getElementById('btn-simpan-tabungan');
 
-      const tujuan = tujuanInput.value.trim();
-      const target = Number(targetInput.value) || 0;
-      const awal = Number(awalInput.value) || 0;
-
-      if (!tujuan || target <= 0) {
-        showToast("Mohon isi Nama Tujuan dan Target Nominal yang valid!", "warning");
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      if (!tujuan || target <= 0) return showToast("Mohon isi Nama Tujuan dan Target Nominal yang valid!", "warning");
+      btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
       try {
-        const { data: existing } = await supabase
-          .from('tabungan')
-          .select('id, terkumpul')
-          .ilike('tujuan', tujuan)
-          .maybeSingle();
-
+        const { data: existing } = await supabase.from('tabungan').select('id, terkumpul').ilike('tujuan', tujuan).maybeSingle();
         if (existing) {
           const updateData = { target_nominal: target };
-          if (awalInput.value.trim() !== '') {
-            updateData.terkumpul = awal;
-          }
-          const { error } = await supabase
-            .from('tabungan')
-            .update(updateData)
-            .eq('id', existing.id);
-          if (error) throw error;
+          if (document.getElementById('input-tabungan-awal').value.trim() !== '') updateData.terkumpul = awal;
+          await supabase.from('tabungan').update(updateData).eq('id', existing.id);
           showToast(`🎯 Target tabungan "${tujuan}" berhasil diperbarui!`, "success");
         } else {
-          const { error } = await supabase
-            .from('tabungan')
-            .insert([{
-              tujuan: tujuan,
-              target_nominal: target,
-              terkumpul: awal
-            }]);
-          if (error) throw error;
+          await supabase.from('tabungan').insert([{ tujuan: tujuan, target_nominal: target, terkumpul: awal }]);
           showToast(`🎯 Target tabungan "${tujuan}" berhasil dibuat!`, "success");
         }
-
-        tujuanInput.value = '';
-        targetInput.value = '';
-        awalInput.value = '';
+        document.getElementById('input-tabungan-tujuan').value = ''; document.getElementById('input-tabungan-target').value = ''; document.getElementById('input-tabungan-awal').value = '';
         await loadTabungan();
       } catch (err) {
-        console.error('Error simpan tabungan:', err);
         showToast("Gagal menyimpan tabungan: " + (err.message || err), "error");
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-plus-circle"></i> <span>Buat Target Tabungan</span>';
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-plus-circle"></i> <span>Buat Target Tabungan</span>';
       }
     }
 
     async function setorTabungan(id, tujuan, inputId, currentTerkumpul) {
       const input = document.getElementById(inputId);
       const nominal = Number(input ? input.value : 0) || 0;
-
-      if (nominal <= 0) {
-        showToast("Masukkan nominal setoran yang valid (lebih dari 0)!", "warning");
-        return;
-      }
+      if (nominal <= 0) return showToast("Masukkan nominal setoran yang valid (lebih dari 0)!", "warning");
 
       try {
         let current = currentTerkumpul || 0;
         if (id && id !== 'null') {
           const { data } = await supabase.from('tabungan').select('terkumpul').eq('id', id).single();
-          if (data && data.terkumpul !== undefined) {
-            current = Number(data.terkumpul) || 0;
-          }
+          if (data && data.terkumpul !== undefined) current = Number(data.terkumpul) || 0;
         }
         const newTotal = current + nominal;
-
         let query = supabase.from('tabungan').update({ terkumpul: newTotal });
-        if (id && id !== 'null') {
-          query = query.eq('id', id);
-        } else {
-          query = query.eq('tujuan', tujuan);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
+        if (id && id !== 'null') query = query.eq('id', id); else query = query.eq('tujuan', tujuan);
+        await query;
         showToast(`💰 Berhasil menyetor ${formatRp(nominal)} ke tabungan "${tujuan}"! Total: ${formatRp(newTotal)}`, "success");
         if (input) input.value = '';
         await loadTabungan();
       } catch (err) {
-        console.error('Error setor tabungan:', err);
         showToast("Gagal menyetor tabungan: " + (err.message || err), "error");
       }
     }
 
     async function hapusTargetTabungan(id, tujuan) {
       if (!confirm(`Hapus target tabungan "${tujuan}"?`)) return;
-
       try {
         let query = supabase.from('tabungan').delete();
-        if (id && id !== 'null') {
-          query = query.eq('id', id);
-        } else {
-          query = query.eq('tujuan', tujuan);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
+        if (id && id !== 'null') query = query.eq('id', id); else query = query.eq('tujuan', tujuan);
+        await query;
         showToast(`🗑️ Target tabungan "${tujuan}" berhasil dihapus!`, "success");
         await loadTabungan();
       } catch (err) {
-        console.error('Error hapus target tabungan:', err);
         showToast("Gagal menghapus target: " + (err.message || err), "error");
       }
     }
@@ -1775,27 +1395,7 @@
     function renderChart(cData) {
       const ctx = document.getElementById('categoryChart').getContext('2d');
       if (myChart) myChart.destroy();
-      myChart = new Chart(ctx, { 
-        type: 'doughnut', 
-        data: { 
-          labels: Object.keys(cData), 
-          datasets: [{ 
-            data: Object.values(cData), 
-            backgroundColor: ['#0f766e', '#059669', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'], 
-            borderWidth: 0 
-          }] 
-        }, 
-        options: { 
-          responsive: true, 
-          maintainAspectRatio: false, 
-          cutout: '75%', 
-          plugins: { 
-            legend: { 
-              position: 'bottom' 
-            } 
-          } 
-        } 
-      });
+      myChart = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(cData), datasets: [{ data: Object.values(cData), backgroundColor: ['#0f766e', '#059669', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } });
     }
 
     // Pemicu inisialisasi saat halaman selesai dimuat

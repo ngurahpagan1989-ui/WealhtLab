@@ -6,13 +6,16 @@
   <title>WealthLab - Smart Financial Dashboard</title>
   <meta name="description" content="WealthLab - Dasbor Keuangan Pribadi & Bisnis Terpadu dengan Supabase">
 
+  <!-- Favicon Bawaan Anti-404 -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💎</text></svg>">
+
   <!-- Font Inter dari Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- CDN Supabase JS v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- CDN Wajib Anti-Blokir: Supabase JS v2 via unpkg -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <!-- CDN Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,14 +42,14 @@
     }
   </script>
 
-  <!-- CDN Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- CDN Chart.js (via cdnjs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
-  <!-- CDN SheetJS (XLSX) & html2pdf.js -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- CDN SheetJS (XLSX) & html2pdf.js (via cdnjs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- CDN FontAwesome Icons -->
+  <!-- CDN FontAwesome Icons (via cdnjs) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -56,7 +59,7 @@
     .menu-inactive { color: #cbd5e1; }
     .menu-inactive:hover { background-color: rgba(255, 255, 255, 0.08); color: #ffffff; }
     
-    /* Custom Scrollbar */
+    /* Scrollbar Halus */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
@@ -757,16 +760,17 @@
     var editingBudgetId = null; 
     var isSemuaWaktu = false; 
 
-    // ================= INISIALISASI SUPABASE KEBAL ADBLOCKER =================
+    // ================= INISIALISASI SUPABASE KEBAL JARINGAN =================
     var SUPABASE_URL = "https://zvcdismojoqwgczjrqaa.supabase.co";
     var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y2Rpc21vam9xd2djempycWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MTgxOTEsImV4cCI6MjEwNzE5NDE5MX0.8Wprk5Pg1mOGithyv_1QcgxFSuIBs7ynzV1gXuDPGZQ";
     
     var supabase = null;
     try {
-      if (typeof window.supabase !== 'undefined') {
+      // WAJIB gunakan if (window.supabase) agar null atau undefined tertangani
+      if (typeof window !== 'undefined' && window.supabase) {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       } else {
-        console.warn("Library Supabase terblokir atau belum termuat.");
+        console.warn("Library Supabase (window.supabase) tidak tersedia atau bernilai null/undefined.");
       }
     } catch (err) {
       console.error("Gagal menyambung ke Supabase:", err);
@@ -957,12 +961,13 @@
       var mainContentEl = document.getElementById('main-content');
       
       if (!supabase) {
+        console.warn("Koneksi Supabase tidak aktif atau CDN terhambat.");
         if (loadingEl) {
           loadingEl.innerHTML = '<div class="bg-amber-50 border border-amber-200 text-amber-900 p-6 rounded-2xl text-center max-w-md mx-auto shadow-sm">' +
             '<i class="fas fa-shield-alt text-4xl text-amber-500 mb-3 block"></i>' +
             '<h3 class="text-base font-bold mb-1">Koneksi Database Terhalang</h3>' +
-            '<p class="text-xs text-amber-700 mb-4 leading-relaxed">Library Supabase tidak dapat dimuat. Hal ini biasanya terjadi jika browser Anda menggunakan ekstensi Adblocker atau Brave Shields.</p>' +
-            '<button onclick="window.location.reload()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition"><i class="fas fa-sync-alt mr-1"></i> Muat Ulang Halaman</button>' +
+            '<p class="text-xs text-amber-700 mb-4 leading-relaxed">Pustaka Supabase tidak dapat dimuat (window.supabase bernilai null atau terhambat jaringan/adblocker). Fitur navigasi tetap berfungsi normal.</p>' +
+            '<button onclick="window.location.reload()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition"><i class="fas fa-sync-alt mr-1"></i> Coba Muat Ulang</button>' +
           '</div>';
         }
         return;
@@ -1352,7 +1357,7 @@
     async function submitTransaksi(e) {
       if (e && e.preventDefault) e.preventDefault();
       if (!supabase) {
-        showToast("Database Supabase tidak terhubung (cek adblocker)!", "error");
+        showToast("Database Supabase tidak terhubung (cek koneksi/adblocker)!", "error");
         return;
       }
 

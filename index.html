@@ -36,6 +36,7 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     @keyframes pulse-ring { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 0.4; } 100% { transform: scale(0.95); opacity: 0.8; } }
     .pulse-mic { animation: pulse-ring 1.5s infinite ease-in-out; }
+    #ptr-indicator { transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   </style>
 </head>
 <body class="bg-slate-50 text-gray-800 flex h-screen overflow-hidden antialiased">
@@ -59,7 +60,7 @@
       </nav>
     </div>
     <div class="p-3 m-3 rounded-xl bg-teal-900/40 text-[11px] text-teal-200 border border-teal-800/40 flex items-center justify-between">
-      <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Supabase REST API</span></div>
+      <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Supabase REST</span></div>
       <span class="text-[9px] bg-emerald-900/60 px-1.5 py-0.5 rounded text-emerald-300 font-bold">PWA Ready</span>
     </div>
   </aside>
@@ -68,22 +69,37 @@
 
   <!-- KONTEN UTAMA -->
   <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+    
+    <!-- BANNER INDIKATOR OFFLINE -->
+    <div id="offline-indicator" class="hidden bg-amber-600 text-white text-xs px-4 py-2 text-center font-bold flex items-center justify-center gap-2 shadow-sm z-20">
+      <i class="fas fa-wifi-slash animate-pulse"></i>
+      <span>Mode Offline: Menampilkan data snapshot cache lokal</span>
+    </div>
+
     <header class="bg-white/90 backdrop-blur-md shadow-xs border-b border-gray-200/80 px-4 py-3 sm:px-6 flex justify-between items-center z-10">
       <div class="flex items-center gap-3">
         <button onclick="toggleSidebar()" class="md:hidden text-gray-600 hover:text-teal-700 p-1" aria-label="Buka Menu"><i class="fas fa-bars text-lg"></i></button>
         <h1 id="page-title" class="text-lg font-bold text-gray-900 tracking-tight">Ringkasan Keuangan</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="bukaModalPilihAksi()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-xs flex items-center gap-2 transition">
+        <button onclick="bukaModalPilihAksi()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-xs flex items-center gap-2 transition active:scale-95">
           <i class="fas fa-plus-circle"></i><span class="hidden sm:inline">Tambah Transaksi</span>
         </button>
         <button onclick="refreshAll()" class="bg-slate-100 hover:bg-slate-200 text-gray-700 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium border border-gray-200 transition" title="Refresh Data">
-          <i class="fas fa-sync-alt"></i>
+          <i class="fas fa-sync-alt" id="btn-refresh-icon"></i>
         </button>
       </div>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6">
+    <!-- AREA KONTEN SCROLLABLE DENGAN PULL-TO-REFRESH -->
+    <div id="main-scroll-container" class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6 relative">
+      
+      <!-- PULL TO REFRESH INDICATOR -->
+      <div id="ptr-indicator" class="overflow-hidden h-0 flex items-center justify-center text-teal-700 text-xs font-semibold gap-2">
+        <i id="ptr-icon" class="fas fa-arrow-down transition-transform duration-200"></i>
+        <span id="ptr-text">Tarik ke bawah untuk memuat ulang...</span>
+      </div>
+
       <div id="loading" class="flex flex-col items-center justify-center py-24 text-center">
         <div class="animate-spin rounded-full h-10 w-10 border-4 border-teal-200 border-t-teal-600 mb-3"></div>
         <p class="text-sm text-gray-600 font-medium">Memuat data dari Supabase...</p>
@@ -213,7 +229,7 @@
     </div>
 
     <!-- FLOATING ACTION BUTTON (ANDROID PWA FRIENDLY) -->
-    <button onclick="bukaModalPilihAksi()" class="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-xl shadow-teal-900/30 flex items-center justify-center text-xl transition transform active:scale-95" aria-label="Tambah Transaksi Cepat">
+    <button onclick="bukaModalPilihAksi()" class="fixed bottom-6 right-6 md:hidden z-30 w-14 h-14 rounded-full bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-xl shadow-teal-900/30 flex items-center justify-center text-xl transition transform active:scale-90" aria-label="Tambah Transaksi Cepat">
       <i class="fas fa-plus"></i>
     </button>
   </main>
@@ -238,7 +254,7 @@
           <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl text-white flex-shrink-0 group-hover:scale-110 transition"><i class="fas fa-microphone"></i></div>
           <div>
             <h4 class="font-black text-sm tracking-wide">Voice Command</h4>
-            <p class="text-[11px] text-red-100/90 leading-tight mt-0.5">Bicara langsung: "Beli bensin 50 ribu operasional"</p>
+            <p class="text-[11px] text-red-100/90 leading-tight mt-0.5">Bicara: "Beli bensin 50 ribu operasional"</p>
           </div>
         </button>
 
@@ -247,7 +263,7 @@
           <div class="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-camera"></i></div>
           <div>
             <h4 class="font-bold text-sm">Photo (Kamera)</h4>
-            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Buka kamera HP langsung memotret nota/struk</p>
+            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Buka kamera HP memotret nota/struk</p>
           </div>
         </button>
 
@@ -265,7 +281,7 @@
           <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-images"></i></div>
           <div>
             <h4 class="font-bold text-sm">Library (Galeri)</h4>
-            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Pilih file struk/bukti transfer dari galeri HP</p>
+            <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Pilih struk/bukti dari galeri foto HP</p>
           </div>
         </button>
       </div>
@@ -277,7 +293,7 @@
   <input type="file" id="file-library" accept="image/*" class="hidden" onchange="handleFileStruk(this, 'Galeri')">
 
   <!-- ============================================== -->
-  <!-- MODAL 2: STATUS VOICE LISTENING / PARSING       -->
+  <!-- MODAL 2: STATUS VOICE LISTENING / RECORDING     -->
   <!-- ============================================== -->
   <div id="modal-voice" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl text-white text-center space-y-4">
@@ -289,17 +305,17 @@
           </div>
         </div>
         <div>
-          <h4 class="font-black text-base text-white">Mendengarkan Perintah...</h4>
-          <p id="voice-hint" class="text-xs text-slate-400 mt-1">Katakan perintah suara, contoh:<br><span class="text-red-400 font-semibold">"Beli bensin 50 ribu operasional"</span></p>
+          <h4 class="font-black text-base text-white">Mendengarkan Suara...</h4>
+          <p id="voice-hint" class="text-xs text-slate-400 mt-1">Katakan perintah transaksi, contoh:<br><span class="text-red-400 font-semibold">"Beli bensin 50 ribu operasional"</span></p>
         </div>
-        <p id="voice-transcript" class="text-sm font-medium text-teal-300 min-h-[24px] italic bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">"..."</p>
+        <p id="voice-transcript" class="text-sm font-medium text-teal-300 min-h-[28px] italic bg-slate-800/80 p-2.5 rounded-xl border border-slate-700">"..."</p>
         <button onclick="stopVoiceCommand()" class="text-xs text-slate-400 hover:text-white underline">Batalkan Voice</button>
       </div>
     </div>
   </div>
 
   <!-- ============================================== -->
-  <!-- MODAL 3: INPUT FORM TRANSAKSI (VOICE/TEXT/FOTO)-->
+  <!-- MODAL 3: INPUT FORM TRANSAKSI & KONFIRMASI      -->
   <!-- ============================================== -->
   <div id="modal-form-transaksi" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 my-8">
@@ -311,12 +327,23 @@
         <button onclick="tutupModalForm()" class="text-gray-400 hover:text-gray-600 p-1"><i class="fas fa-times"></i></button>
       </div>
 
-      <!-- Preview Nota/Struk jika opsi Photo/Library -->
+      <!-- Kotak Hasil Transkripsi Asli & Parsing Suara (Muncul jika opsi Voice) -->
+      <div id="voice-result-box" class="hidden bg-red-50 border border-red-200 p-3 rounded-2xl space-y-1">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold text-red-700 uppercase flex items-center gap-1">
+            <i class="fas fa-microphone"></i> Transkripsi Suara Asli
+          </span>
+          <span id="voice-parsed-summary" class="text-[10px] bg-red-100 text-red-800 font-semibold px-2 py-0.5 rounded-full border border-red-200">Auto-Parsed</span>
+        </div>
+        <p id="voice-result-text" class="text-xs font-semibold text-gray-800 italic">"..."</p>
+      </div>
+
+      <!-- Preview Nota/Struk Terkompresi (Muncul jika opsi Photo/Library) -->
       <div id="preview-struk-container" class="hidden bg-slate-50 p-3 rounded-2xl border border-gray-200 flex items-center gap-3">
         <img id="preview-struk-img" class="w-14 h-14 object-cover rounded-xl border border-gray-300" src="" alt="Nota">
         <div class="text-xs flex-1 min-w-0">
           <span class="font-bold text-gray-800 block truncate" id="preview-struk-name">nota.jpg</span>
-          <span class="text-[10px] text-teal-600 font-semibold bg-teal-50 px-2 py-0.5 rounded-full inline-block mt-0.5">Bukti Struk Terlampir</span>
+          <span class="text-[10px] text-teal-600 font-semibold bg-teal-50 px-2 py-0.5 rounded-full inline-block mt-0.5">Struk Terkompresi (&lt; 300KB)</span>
         </div>
       </div>
 
@@ -337,7 +364,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-3 border-t">
           <button type="button" onclick="tutupModalForm()" class="px-3.5 py-2 text-gray-500 font-medium">Batal</button>
-          <button type="submit" id="btn-save-trans" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl font-bold flex items-center gap-1.5 shadow-sm">
+          <button type="submit" id="btn-save-trans" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl font-bold flex items-center gap-1.5 shadow-sm active:scale-95">
             <i class="fas fa-check"></i><span>Simpan Transaksi</span>
           </button>
         </div>
@@ -351,7 +378,7 @@
     var myChart = null, allTransactions = [], cachedBudgetData = [], cachedHutangData = [], cachedTabunganData = [];
     var editingBudgetId = null, isSemuaWaktu = false;
     var voiceRecognition = null;
-    var currentStrukBase64 = null, currentStrukFileName = null, currentStrukFile = null;
+    var currentStrukBlob = null, currentStrukBase64 = null, currentStrukFileName = null;
 
     var SUPABASE_URL = "https://zvcdismojoqwgczjrqaa.supabase.co";
     var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y2Rpc21vam9xd2djempycWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MTgxOTEsImV4cCI6MjEwNzE5NDE5MX0.8Wprk5Pg1mOGithyv_1QcgxFSuIBs7ynzV1gXuDPGZQ";
@@ -471,10 +498,10 @@
     };
     window.supabase = supabase;
 
-    // ----------------- TOAST & FORMATTING -----------------
+    // ----------------- TOAST, HAPTIC & FORMATTING -----------------
     function showToast(msg, type) {
       var t = document.createElement('div');
-      var color = (type === 'error') ? 'bg-rose-600' : (type === 'warning' ? 'bg-amber-500' : 'bg-teal-700');
+      var color = (type === 'error') ? 'bg-rose-600' : (type === 'warning' ? 'bg-amber-500' : (type === 'info' ? 'bg-sky-600' : 'bg-teal-700'));
       t.className = 'fixed bottom-5 right-5 z-50 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg transition-opacity duration-300 ' + color;
       t.innerText = msg;
       document.body.appendChild(t);
@@ -508,6 +535,51 @@
       return '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ' + (isB ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-teal-50 text-teal-700 border-teal-200') + '">' + (isB ? 'Bisnis' : 'Pribadi') + '</span>';
     }
 
+    // ----------------- OFFLINE CACHE (LOCALSTORAGE) -----------------
+    function saveSnapshotToLocal(transactions) {
+      if (!transactions) return;
+      try {
+        var snapshot = {
+          transactions: transactions,
+          savedAt: new Date().toISOString()
+        };
+        localStorage.setItem('wealthlab_dashboard_cache', JSON.stringify(snapshot));
+      } catch (err) {
+        console.warn("Gagal simpan cache:", err);
+      }
+    }
+
+    function loadFromLocalCache() {
+      try {
+        var raw = localStorage.getItem('wealthlab_dashboard_cache');
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && parsed.transactions && parsed.transactions.length) {
+            processData(parsed.transactions);
+            var offInd = document.getElementById('offline-indicator');
+            if (offInd) offInd.classList.remove('hidden');
+            return true;
+          }
+        }
+      } catch (e) {
+        console.warn("Gagal baca cache:", e);
+      }
+      return false;
+    }
+
+    window.addEventListener('online', function() {
+      var offInd = document.getElementById('offline-indicator');
+      if (offInd) offInd.classList.add('hidden');
+      showToast("Koneksi kembali online! Menyinkronkan...", "info");
+      refreshAll();
+    });
+
+    window.addEventListener('offline', function() {
+      var offInd = document.getElementById('offline-indicator');
+      if (offInd) offInd.classList.remove('hidden');
+      showToast("Koneksi internet terputus (Offline)", "warning");
+    });
+
     // ----------------- NAVIGASI TAB -----------------
     function switchTab(name) {
       var sec = document.querySelectorAll('.view-section'), nav = document.querySelectorAll('.nav-item');
@@ -526,13 +598,22 @@
     // ----------------- SINKRONISASI DATA -----------------
     async function refreshAll() {
       var l = document.getElementById('loading'), mc = document.getElementById('main-content');
-      if (l) l.classList.remove('hidden'); if (mc) mc.classList.add('hidden');
+      var refIcon = document.getElementById('btn-refresh-icon');
+      if (refIcon) refIcon.classList.add('fa-spin');
+      if (l && (!allTransactions || !allTransactions.length)) l.classList.remove('hidden');
+      
       try {
         await Promise.all([loadTransaksi(), loadBudget(), loadHutangPiutang(), loadTabungan()]);
+        var offInd = document.getElementById('offline-indicator');
+        if (offInd) offInd.classList.add('hidden');
       } catch (e) {
-        console.warn('Sync error:', e);
+        console.warn('Sync error, mencoba muat dari cache lokal:', e);
+        var loaded = loadFromLocalCache();
+        if (!loaded) showToast("Gagal memuat data dari cloud & cache.", "error");
       } finally {
-        if (l) l.classList.add('hidden'); if (mc) mc.classList.remove('hidden');
+        if (l) l.classList.add('hidden'); 
+        if (mc) mc.classList.remove('hidden');
+        if (refIcon) refIcon.classList.remove('fa-spin');
       }
     }
 
@@ -544,11 +625,18 @@
       var tip = r.tipe ? String(r.tipe).trim() : "Pengeluaran";
       return { id: r.id || null, tanggal: r.tanggal || "", deskripsi: r.deskripsi || "", kategori: r.kategori || "", nominal: nom, metode: r.metode || "-", dompet: dmp, tipe: tip, catatan: r.catatan || "-", isKeluar: tip.toLowerCase() !== 'pemasukan' };
     }
+
     async function loadTransaksi() {
       var res = await supabase.from('transaksi').select('*').order('tanggal', { ascending: false });
-      if (!res.error) processData(res.data || []);
-      else console.warn("Transaksi error:", res.error);
+      if (!res.error && res.data) {
+        processData(res.data);
+        saveSnapshotToLocal(res.data);
+      } else {
+        console.warn("Transaksi error:", res.error);
+        if (!navigator.onLine || !allTransactions.length) loadFromLocalCache();
+      }
     }
+
     function processData(rows) {
       allTransactions = rows || [];
       var tIn = 0, tOut = 0, inP = 0, outP = 0, inB = 0, outB = 0, cats = {}, tDash = document.getElementById('tbody-dashboard');
@@ -577,9 +665,11 @@
       filterTransaksi();
       if (cachedBudgetData && cachedBudgetData.length) tampilkanBudget(cachedBudgetData);
     }
+
     function setSemuaWaktu() { isSemuaWaktu = !isSemuaWaktu; if (isSemuaWaktu) document.getElementById('filter-bulan').value = ''; updateSemuaBtn(); filterTransaksi(); }
     function onFilterBulanChange() { isSemuaWaktu = !document.getElementById('filter-bulan').value; updateSemuaBtn(); filterTransaksi(); }
     function updateSemuaBtn() { var b = document.getElementById('btn-semua-waktu'); if (b) b.className = isSemuaWaktu ? 'px-3.5 py-2 bg-teal-600 text-white rounded-xl font-semibold' : 'px-3.5 py-2 bg-white border border-gray-200 rounded-xl text-gray-700 hover:bg-slate-100'; }
+
     function filterTransaksi() {
       var q = (document.getElementById('search-tag').value || '').trim().toLowerCase();
       var bIn = document.getElementById('filter-bulan');
@@ -600,6 +690,7 @@
       netEl.className = 'text-base font-bold ' + (net < 0 ? 'text-rose-600' : 'text-teal-700');
       renderTabelSemua(filtered);
     }
+
     function renderTabelSemua(list) {
       var tb = document.getElementById('tbody-semua'), ml = document.getElementById('mobile-transaction-list');
       if (tb) tb.innerHTML = ''; if (ml) ml.innerHTML = '';
@@ -613,17 +704,20 @@
         var c = it.isKeluar ? 'text-rose-600' : 'text-emerald-600', val = (it.isKeluar ? '-' : '+') + formatRp(it.nominal);
         var idArg = it.id ? "'" + it.id + "'" : 'null', descArg = (it.deskripsi || '').replace(/'/g, "\\'");
         if (tb) tb.innerHTML += '<tr class="hover:bg-slate-50"><td class="p-3 text-gray-500">' + formatDt(it.tanggal) + '</td><td class="p-3 font-semibold">' + renderHashtags(it.deskripsi) + '</td><td class="p-3">' + badgeDompet(it.dompet) + '</td><td class="p-3"><span class="px-2 py-0.5 bg-teal-50 text-teal-700 rounded-full">' + (it.kategori || '-') + '</span></td><td class="p-3 text-gray-600">' + renderHashtags(it.catatan) + '</td><td class="p-3 text-right font-bold ' + c + '">' + val + '</td><td class="p-3 text-center" data-html2canvas-ignore="true"><button onclick="hapusTransaksi(' + idArg + ', \'' + descArg + '\')" class="text-rose-500 hover:text-rose-700 p-1"><i class="fas fa-trash-alt"></i></button></td></tr>';
-        if (ml) ml.innerHTML += '<div class="bg-white p-3.5 rounded-xl border flex justify-between items-center text-xs shadow-xs"><div><p class="font-bold text-gray-900">' + renderHashtags(it.deskripsi) + '</p><div class="flex items-center gap-1.5 text-gray-500 mt-1"><span>' + formatDt(it.tanggal) + '</span>•' + badgeDompet(it.dompet) + '</div></div><div class="text-right"><p class="font-black ' + c + '">' + val + '</p><button onclick="hapusTransaksi(' + idArg + ', \'' + descArg + '\')" class="text-rose-500 mt-1 text-[11px]"><i class="fas fa-trash-alt mr-0.5"></i>Hapus</button></div></div>';
+        if (ml) ml.innerHTML += '<div class="bg-white p-3.5 rounded-xl border flex justify-between items-center text-xs shadow-xs"><div><p class="font-bold text-gray-900">' + renderHashtags(it.deskripsi) + '</p><div class="flex items-center gap-1.5 text-gray-500 mt-1"><span>' + formatDt(it.tanggal) + '</span>•' + badgeDompet(it.dompet) + '</div><div class="mt-1">' + renderHashtags(it.catatan) + '</div></div><div class="text-right"><p class="font-black ' + c + '">' + val + '</p><button onclick="hapusTransaksi(' + idArg + ', \'' + descArg + '\')" class="text-rose-500 mt-1 text-[11px]"><i class="fas fa-trash-alt mr-0.5"></i>Hapus</button></div></div>';
       }
     }
+
     function pilihTag(tg) { var inp = document.getElementById('search-tag'); if (inp) { inp.value = tg; filterTransaksi(); } }
     function clearSearch() { document.getElementById('search-tag').value = ''; filterTransaksi(); }
+
     async function hapusTransaksi(id, desc) {
       if (!confirm("Hapus transaksi \"" + desc + "\"?")) return;
       var res = await supabase.from('transaksi').delete().eq('id', id);
       if (res.error) showToast("Gagal hapus: " + (res.error.message || res.error), "error");
       else { showToast("Transaksi dihapus!"); loadTransaksi(); }
     }
+
     function exportExcel() { var t = document.getElementById('tabel-semua-transaksi'); if (t) { XLSX.writeFile(XLSX.utils.table_to_book(t, { sheet: "Transaksi" }), "WealthLab_Transaksi.xlsx"); showToast("File Excel diunduh!"); } }
     function exportPDF() { var el = document.getElementById('area-cetak-laporan'); if (el) { html2pdf().set({ margin: 8, filename: 'WealthLab_Laporan.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).from(el).save().then(function() { showToast("File PDF diunduh!"); }); } }
 
@@ -635,12 +729,12 @@
       document.getElementById('modal-quick-selector').classList.add('hidden');
     }
 
-    // Opsi 1: Voice Command (Web Speech API)
+    // 1. VOICE COMMAND DENGAN WEB SPEECH API & PARSER INDONESIA
     function mulaiVoiceCommand() {
       tutupModalPilihAksi();
       var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        showToast("Browser ini tidak mendukung Web Speech API. Silakan pilih opsi Text.", "warning");
+        showToast("Browser tidak mendukung Web Speech API. Beralih ke teks manual.", "warning");
         bukaModalManual();
         return;
       }
@@ -690,7 +784,7 @@
       if (modalVoice) modalVoice.classList.add('hidden');
     }
 
-    // Parsing Bahasa Alami untuk Perintah Suara
+    // Parser Regex Bahasa Indonesia untuk Angka Natural, Dompet & Kategori
     function parseVoiceText(text) {
       var raw = String(text || '').trim();
       if (!raw) return null;
@@ -698,45 +792,57 @@
 
       // 1. Tipe Transaksi
       var tipe = 'Pengeluaran';
-      if (lower.indexOf('pemasukan') !== -1 || lower.indexOf('gaji') !== -1 || lower.indexOf('terima') !== -1 || lower.indexOf('dapat') !== -1 || lower.indexOf('penjualan') !== -1 || lower.indexOf('masuk') !== -1) {
+      if (lower.indexOf('pemasukan') !== -1 || lower.indexOf('gaji') !== -1 || lower.indexOf('terima') !== -1 || lower.indexOf('dapat') !== -1 || lower.indexOf('penjualan') !== -1 || lower.indexOf('masuk') !== -1 || lower.indexOf('omzet') !== -1 || lower.indexOf('omset') !== -1) {
         tipe = 'Pemasukan';
       }
 
-      // 2. Pilihan Dompet
+      // 2. Deteksi Dompet Otomatis: jika ada "bisnis", "kantor", "toko" -> Bisnis, else Pribadi
       var dompet = 'Pribadi';
-      if (lower.indexOf('bisnis') !== -1 || lower.indexOf('kantor') !== -1 || lower.indexOf('usaha') !== -1 || lower.indexOf('toko') !== -1 || lower.indexOf('proyek') !== -1) {
+      if (lower.indexOf('bisnis') !== -1 || lower.indexOf('kantor') !== -1 || lower.indexOf('toko') !== -1 || lower.indexOf('usaha') !== -1 || lower.indexOf('proyek') !== -1) {
         dompet = 'Bisnis';
       }
 
-      // 3. Kategori
+      // 3. Deteksi Kategori
       var kategori = 'Operasional';
-      if (lower.indexOf('makan') !== -1 || lower.indexOf('minum') !== -1 || lower.indexOf('kopi') !== -1 || lower.indexOf('resto') !== -1 || lower.indexOf('warung') !== -1 || lower.indexOf('jajan') !== -1) {
+      if (lower.indexOf('makan') !== -1 || lower.indexOf('minum') !== -1 || lower.indexOf('kopi') !== -1 || lower.indexOf('resto') !== -1 || lower.indexOf('warung') !== -1 || lower.indexOf('jajan') !== -1 || lower.indexOf('sarapan') !== -1 || lower.indexOf('siang') !== -1) {
         kategori = 'Makanan & Minuman';
-      } else if (lower.indexOf('bensin') !== -1 || lower.indexOf('parkir') !== -1 || lower.indexOf('tol') !== -1 || lower.indexOf('ojol') !== -1 || lower.indexOf('grab') !== -1 || lower.indexOf('gojek') !== -1 || lower.indexOf('transport') !== -1) {
+      } else if (lower.indexOf('bensin') !== -1 || lower.indexOf('parkir') !== -1 || lower.indexOf('tol') !== -1 || lower.indexOf('ojol') !== -1 || lower.indexOf('grab') !== -1 || lower.indexOf('gojek') !== -1 || lower.indexOf('transport') !== -1 || lower.indexOf('solar') !== -1) {
         kategori = 'Transportasi';
-      } else if (lower.indexOf('listrik') !== -1 || lower.indexOf('air') !== -1 || lower.indexOf('pdam') !== -1 || lower.indexOf('wifi') !== -1 || lower.indexOf('pulsa') !== -1 || lower.indexOf('tagihan') !== -1) {
+      } else if (lower.indexOf('listrik') !== -1 || lower.indexOf('air') !== -1 || lower.indexOf('pdam') !== -1 || lower.indexOf('wifi') !== -1 || lower.indexOf('pulsa') !== -1 || lower.indexOf('tagihan') !== -1 || lower.indexOf('internet') !== -1) {
         kategori = 'Tagihan & Utilitas';
-      } else if (lower.indexOf('belanja') !== -1 || lower.indexOf('baju') !== -1 || lower.indexOf('shopee') !== -1 || lower.indexOf('tokopedia') !== -1) {
+      } else if (lower.indexOf('belanja') !== -1 || lower.indexOf('baju') !== -1 || lower.indexOf('shopee') !== -1 || lower.indexOf('tokopedia') !== -1 || lower.indexOf('pasar') !== -1) {
         kategori = 'Belanja';
-      } else if (lower.indexOf('gaji') !== -1 || lower.indexOf('bonus') !== -1 || lower.indexOf('omset') !== -1) {
+      } else if (lower.indexOf('gaji') !== -1 || lower.indexOf('bonus') !== -1 || lower.indexOf('omset') !== -1 || lower.indexOf('omzet') !== -1 || lower.indexOf('dividen') !== -1) {
         kategori = 'Gaji & Pendapatan';
       }
 
-      // 4. Ekstraksi Nominal
+      // 4. Konversi Regex Angka Natural ke Numerik
       var nominal = 0;
+      // Kasus A: "X juta" / "X jt"
       var matchJuta = lower.match(/(\d+(?:[.,]\d+)?)\s*(?:juta|jt)/);
       if (matchJuta) {
         var valJ = parseFloat(matchJuta[1].replace(',', '.'));
         nominal = Math.round(valJ * 1000000);
       } else {
-        var matchRibu = lower.match(/(\d+(?:[.,]\d+)?)\s*(?:ribu|rb|k)/);
+        // Kasus B: "X ribu" / "X rb" / "X k"
+        var matchRibu = lower.match(/(\d+(?:[.,]\d+)?)\s*(?:ribu|rb|k\b)/);
         if (matchRibu) {
           var valR = parseFloat(matchRibu[1].replace(',', '.'));
           nominal = Math.round(valR * 1000);
         } else {
-          var matchNum = lower.match(/(?:rp\.?\s*)?(\d{1,3}(?:[.,]\d{3})+|\d+)/);
-          if (matchNum) {
-            nominal = parseFloat(matchNum[1].replace(/[.,]/g, '')) || 0;
+          // Kasus C: Frasa teks umum
+          if (lower.indexOf('setengah juta') !== -1) {
+            nominal = 500000;
+          } else if (lower.indexOf('seratus ribu') !== -1) {
+            nominal = 100000;
+          } else if (lower.indexOf('lima puluh ribu') !== -1) {
+            nominal = 50000;
+          } else {
+            // Kasus D: Angka numerik standar (contoh: Rp 50.000 atau 50000)
+            var matchNum = lower.match(/(?:rp\.?\s*)?(\d{1,3}(?:[.,]\d{3})+|\d+)/);
+            if (matchNum) {
+              nominal = parseFloat(matchNum[1].replace(/[.,]/g, '')) || 0;
+            }
           }
         }
       }
@@ -745,17 +851,51 @@
       var deskripsi = raw;
       if (deskripsi.length > 0) deskripsi = deskripsi.charAt(0).toUpperCase() + deskripsi.slice(1);
 
-      return { deskripsi: deskripsi, nominal: nominal, kategori: kategori, dompet: dompet, tipe: tipe };
+      return {
+        deskripsi: deskripsi,
+        nominal: nominal,
+        kategori: kategori,
+        dompet: dompet,
+        tipe: tipe,
+        transcriptAsli: raw
+      };
     }
 
     function prosesHasilSuara(speechText) {
       var parsed = parseVoiceText(speechText);
       if (!parsed) return;
       bukaModalForm('Voice', parsed);
-      showToast("Perintah suara diparsing: " + formatRp(parsed.nominal), "success");
+      showToast("Suara diparsing: " + formatRp(parsed.nominal), "info");
     }
 
-    // Opsi 2 & 4: Kamera & Galeri Struk
+    // 2 & 4. KOMPRESI GAMBAR VIA HTML5 CANVAS & UNGGAH STRUK
+    function kompresGambar(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var maxWidth = 1024;
+          var width = img.width;
+          var height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(function(blob) {
+            var dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            callback(blob, dataUrl);
+          }, 'image/jpeg', 0.7);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function triggerKameraStruk() {
       tutupModalPilihAksi();
       var input = document.getElementById('file-camera');
@@ -771,42 +911,44 @@
     function handleFileStruk(inputEl, sumber) {
       if (!inputEl.files || !inputEl.files[0]) return;
       var file = inputEl.files[0];
-      currentStrukFile = file;
-      currentStrukFileName = file.name || 'struk.jpg';
+      var rawName = file.name || 'struk.jpg';
+      showToast("Mengompresi struk (< 300KB)...", "info");
 
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        currentStrukBase64 = e.target.result;
+      kompresGambar(file, function(blob, dataUrl) {
+        currentStrukBlob = blob;
+        currentStrukBase64 = dataUrl;
+        currentStrukFileName = 'struk_' + Date.now() + '.jpg';
+
         var initData = {
           deskripsi: "Struk Belanja (" + sumber + ")",
           nominal: 0,
           kategori: "Belanja",
           dompet: "Pribadi",
           tipe: "Pengeluaran",
-          catatan: "#Struk " + currentStrukFileName,
-          strukPreview: currentStrukBase64,
+          catatan: "#Struk " + rawName,
+          strukPreview: dataUrl,
           strukName: currentStrukFileName,
-          strukFile: currentStrukFile
+          strukBlob: blob
         };
         bukaModalForm('Struk', initData);
-      };
-      reader.readAsDataURL(file);
+      });
       inputEl.value = '';
     }
 
-    // Opsi 3: Input Manual Text
+    // 3. INPUT MANUAL TEXT
     function bukaModalManual() {
       tutupModalPilihAksi();
       bukaModalForm('Manual', null);
     }
 
-    // Buka Form Universal
+    // FORM MODAL UNIVERSAL & KONFIRMASI
     function bukaModalForm(mode, initData) {
       var modal = document.getElementById('modal-form-transaksi');
       var titleEl = document.getElementById('form-modal-title');
       var subEl = document.getElementById('form-modal-sub');
       var iconEl = document.getElementById('form-modal-icon');
       var strukContainer = document.getElementById('preview-struk-container');
+      var voiceBox = document.getElementById('voice-result-box');
 
       var nowIso = new Date().toISOString().split('T')[0];
       document.getElementById('form-tanggal').value = nowIso;
@@ -819,14 +961,20 @@
       document.getElementById('form-catatan').value = '';
 
       if (strukContainer) strukContainer.classList.add('hidden');
+      if (voiceBox) voiceBox.classList.add('hidden');
+      currentStrukBlob = null;
       currentStrukBase64 = null;
       currentStrukFileName = null;
-      currentStrukFile = null;
 
       if (mode === 'Voice') {
-        titleEl.innerText = "Hasil Voice Command";
-        subEl.innerText = "Periksa hasil parsing suara dan klik simpan";
+        titleEl.innerText = "Konfirmasi Voice Command";
+        subEl.innerText = "Periksa hasil parsing suara sebelum disimpan";
         iconEl.innerHTML = '<i class="fas fa-microphone text-red-500"></i>';
+        if (voiceBox && initData && initData.transcriptAsli) {
+          document.getElementById('voice-result-text').innerText = '"' + initData.transcriptAsli + '"';
+          document.getElementById('voice-parsed-summary').innerText = formatRp(initData.nominal || 0) + ' • ' + (initData.dompet || 'Pribadi');
+          voiceBox.classList.remove('hidden');
+        }
       } else if (mode === 'Struk') {
         titleEl.innerText = "Konfirmasi Foto Struk";
         subEl.innerText = "Lengkapi nominal dan kategori dari nota";
@@ -845,9 +993,9 @@
         if (initData.tipe) document.getElementById('form-tipe').value = initData.tipe;
         if (initData.catatan) document.getElementById('form-catatan').value = initData.catatan;
         if (initData.strukPreview) {
+          currentStrukBlob = initData.strukBlob || null;
           currentStrukBase64 = initData.strukPreview;
-          currentStrukFileName = initData.strukName;
-          currentStrukFile = initData.strukFile || null;
+          currentStrukFileName = initData.strukName || 'struk.jpg';
           var imgEl = document.getElementById('preview-struk-img');
           var nameEl = document.getElementById('preview-struk-name');
           if (imgEl) imgEl.src = initData.strukPreview;
@@ -865,11 +1013,12 @@
     function tutupModalForm() {
       var modal = document.getElementById('modal-form-transaksi');
       if (modal) modal.classList.add('hidden');
+      currentStrukBlob = null;
       currentStrukBase64 = null;
       currentStrukFileName = null;
-      currentStrukFile = null;
     }
 
+    // SUBMIT TRANSAKSI KE SUPABASE + UPLOAD STORAGE RECEIPTS + HAPTIC FEEDBACK
     async function submitTransaksiUniversal(e) {
       if (e) e.preventDefault();
       var btn = document.getElementById('btn-save-trans');
@@ -884,28 +1033,30 @@
       var kategori = document.getElementById('form-kategori').value.trim() || 'Lain-lain';
       var catatan = document.getElementById('form-catatan').value.trim() || '-';
 
-      // Upload struk ke Supabase Storage (opsional) atau simpan nama struk
-      if (currentStrukFile) {
+      // 1. Upload Struk Terkompresi ke Supabase Storage bucket 'receipts'
+      if (currentStrukBlob) {
         try {
-          var cleanFileName = Date.now() + '_' + (currentStrukFile.name || 'struk.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
-          var uploadUrl = SUPABASE_URL + "/storage/v1/object/struk/" + cleanFileName;
+          var cleanFileName = Date.now() + '_' + (currentStrukFileName || 'struk.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+          var uploadUrl = SUPABASE_URL + "/storage/v1/object/receipts/" + cleanFileName;
+          
           var uploadRes = await fetch(uploadUrl, {
             method: "POST",
             headers: {
               "apikey": SUPABASE_ANON_KEY,
               "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-              "Content-Type": currentStrukFile.type || "image/jpeg"
+              "Content-Type": "image/jpeg"
             },
-            body: currentStrukFile
+            body: currentStrukBlob
           });
+
           if (uploadRes && uploadRes.ok) {
-            var publicUrl = SUPABASE_URL + "/storage/v1/object/public/struk/" + cleanFileName;
+            var publicUrl = SUPABASE_URL + "/storage/v1/object/public/receipts/" + cleanFileName;
             catatan = (catatan === '-' ? '' : catatan + ' ') + '[STRUK: ' + publicUrl + ']';
           } else {
             catatan = (catatan === '-' ? '' : catatan + ' ') + '[STRUK: ' + (currentStrukFileName || 'struk.jpg') + ']';
           }
         } catch (uploadErr) {
-          console.warn("Storage upload notice:", uploadErr);
+          console.warn("Storage receipts upload fallback:", uploadErr);
           catatan = (catatan === '-' ? '' : catatan + ' ') + '[STRUK: ' + (currentStrukFileName || 'struk.jpg') + ']';
         }
       } else if (currentStrukFileName) {
@@ -928,6 +1079,10 @@
         if (res.error) {
           showToast("Gagal simpan: " + (res.error.message || res.error), "error");
         } else {
+          // HAPTIC FEEDBACK PADA ANDROID / MOBILE
+          if (navigator.vibrate) {
+            try { navigator.vibrate(50); } catch (e) {}
+          }
           showToast("Transaksi berhasil disimpan ke Supabase!");
           tutupModalForm();
           loadTransaksi();
@@ -952,7 +1107,7 @@
     }
     async function loadBudget() {
       var res = await supabase.from('budget').select('*').order('kategori', { ascending: true });
-      if (!res.error) tampilkanBudget(res.data || []);
+      if (!res.error && res.data) tampilkanBudget(res.data);
       else console.warn("Budget error:", res.error);
     }
     function tampilkanBudget(data) {
@@ -978,6 +1133,7 @@
       if (!k || l <= 0) return showToast("Isi kategori dan limit!", "warning");
       if (editingBudgetId) await supabase.from('budget').update({ kategori: k, limit_nominal: l, threshold: th }).eq('id', editingBudgetId);
       else await supabase.from('budget').insert([{ kategori: k, limit_nominal: l, threshold: th }]);
+      if (navigator.vibrate) navigator.vibrate(30);
       showToast("Budget tersimpan!"); batalEditBudget(); loadBudget();
     }
     async function hapusBudget(k, id) {
@@ -990,7 +1146,7 @@
     // ----------------- MODUL HUTANG & PIUTANG -----------------
     async function loadHutangPiutang() {
       var res = await supabase.from('hutang_piutang').select('*').order('tanggal', { ascending: false });
-      if (!res.error) tampilkanHutangPiutang(res.data || []);
+      if (!res.error && res.data) tampilkanHutangPiutang(res.data);
       else console.warn("Hutang error:", res.error);
     }
     function tampilkanHutangPiutang(data) {
@@ -1003,7 +1159,7 @@
         var r = data[i], isH = String(r.tipe).toLowerCase() === 'hutang', nom = parseFloat(r.nominal || 0) || 0, isL = String(r.status).toLowerCase() === 'lunas';
         if (!isL) { if (isH) tH += nom; else tP += nom; }
         var idArg = r.id ? "'" + r.id + "'" : 'null', nArg = (r.nama || '').replace(/'/g, "\\'");
-        var bLunas = !isL ? '<button onclick="tandaiLunasHutang(' + idArg + ', \'' + nArg + '\')" class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded border border-emerald-200 text-[10px] font-semibold"><i class="fas fa-check mr-0.5"></i>Lunas</button>' : '<span class="text-emerald-600 font-bold">Lunas</span>';
+        var bLunas = !isL ? '<button onclick="tandaiLunasHutang(' + idArg + ', \'' + nArg + '\')" class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded border border-emerald-200 text-[10px] font-semibold active:scale-95"><i class="fas fa-check mr-0.5"></i>Lunas</button>' : '<span class="text-emerald-600 font-bold">Lunas</span>';
         tb.innerHTML += '<tr class="hover:bg-slate-50"><td class="p-3 text-gray-500">' + formatDt(r.tanggal) + '</td><td class="p-3 font-semibold">' + r.nama + '</td><td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-semibold ' + (isH ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700') + '">' + r.tipe + '</span></td><td class="p-3 text-right font-bold ' + (isH ? 'text-rose-600' : 'text-emerald-600') + '">' + formatRp(nom) + '</td><td class="p-3 text-center">' + (isL ? '<span class="text-emerald-600 font-semibold">Lunas</span>' : '<span class="text-amber-600 font-semibold">Belum Lunas</span>') + '</td><td class="p-3 text-gray-600">' + (r.keterangan || '-') + '</td><td class="p-3 text-center"><div class="flex justify-center items-center gap-1.5">' + bLunas + '<button onclick="hapusHutang(' + idArg + ', \'' + nArg + '\')" class="text-rose-500 p-1"><i class="fas fa-trash-alt"></i></button></div></td></tr>';
       }
       document.getElementById('total-hutang').innerText = formatRp(tH);
@@ -1014,13 +1170,16 @@
       var nama = document.getElementById('input-hp-nama').value.trim(), tipe = document.getElementById('input-hp-tipe').value, nom = Number(document.getElementById('input-hp-nominal').value) || 0, ket = document.getElementById('input-hp-keterangan').value.trim() || '-';
       if (!nama || nom <= 0) return showToast("Isi nama dan nominal!", "warning");
       await supabase.from('hutang_piutang').insert([{ tanggal: tgl, nama: nama, tipe: tipe, nominal: nom, status: 'Belum Lunas', keterangan: ket }]);
+      if (navigator.vibrate) navigator.vibrate(30);
       showToast("Catatan tersimpan!"); document.getElementById('input-hp-nama').value = ''; document.getElementById('input-hp-nominal').value = ''; loadHutangPiutang();
     }
     async function tandaiLunasHutang(id, nama) {
       if (!confirm("Tandai lunas catatan \"" + nama + "\"?")) return;
       var q = supabase.from('hutang_piutang').update({ status: 'Lunas' });
       if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('nama', nama);
-      await q; showToast("Status lunas diperbarui!"); loadHutangPiutang();
+      await q; 
+      if (navigator.vibrate) navigator.vibrate(30);
+      showToast("Status lunas diperbarui!"); loadHutangPiutang();
     }
     async function hapusHutang(id, nama) {
       if (!confirm("Hapus catatan \"" + nama + "\"?")) return;
@@ -1032,7 +1191,7 @@
     // ----------------- MODUL TABUNGAN -----------------
     async function loadTabungan() {
       var res = await supabase.from('tabungan').select('*').order('created_at', { ascending: true });
-      if (!res.error) tampilkanTabungan(res.data || []);
+      if (!res.error && res.data) tampilkanTabungan(res.data);
       else console.warn("Tabungan error:", res.error);
     }
     function tampilkanTabungan(data) {
@@ -1044,13 +1203,14 @@
       for (var i = 0; i < data.length; i++) {
         var r = data[i], tg = parseFloat(r.target_nominal || 0) || 0, col = parseFloat(r.terkumpul || 0) || 0, pct = tg > 0 ? (col / tg) * 100 : 0, isDone = pct >= 100;
         var idArg = r.id ? "'" + r.id + "'" : 'null', tArg = (r.tujuan || '').replace(/'/g, "\\'");
-        cnt.innerHTML += '<div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between space-y-3"><div><div class="flex justify-between items-start"><div><h4 class="font-bold text-gray-900 text-sm">' + r.tujuan + '</h4><span class="text-xs text-gray-400">Target: ' + formatRp(tg) + '</span></div><button onclick="hapusTargetTabungan(' + idArg + ', \'' + tArg + '\')" class="text-gray-400 hover:text-rose-500 p-1"><i class="fas fa-trash-alt text-xs"></i></button></div><div class="mt-2"><div class="flex justify-between text-xs font-bold mb-1"><span class="' + (isDone ? 'text-emerald-600' : 'text-teal-700') + '">' + formatRp(col) + '</span><span>' + pct.toFixed(1) + '%</span></div><div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div class="' + (isDone ? 'bg-emerald-500' : 'bg-teal-500') + ' h-2" style="width:' + Math.min(pct, 100) + '%"></div></div></div>' + (isDone ? '<span class="inline-block mt-2 text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded">🎉 Target Tercapai!</span>' : '') + '</div><div class="pt-2 border-t flex gap-1.5"><input type="number" id="input-setor-' + i + '" placeholder="Nominal Setoran" class="border p-2 rounded-xl text-xs w-full"><button onclick="setorTabungan(' + idArg + ', \'' + tArg + '\', \'input-setor-' + i + '\', ' + col + ')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold">Setor</button></div></div>';
+        cnt.innerHTML += '<div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between space-y-3"><div><div class="flex justify-between items-start"><div><h4 class="font-bold text-gray-900 text-sm">' + r.tujuan + '</h4><span class="text-xs text-gray-400">Target: ' + formatRp(tg) + '</span></div><button onclick="hapusTargetTabungan(' + idArg + ', \'' + tArg + '\')" class="text-gray-400 hover:text-rose-500 p-1"><i class="fas fa-trash-alt text-xs"></i></button></div><div class="mt-2"><div class="flex justify-between text-xs font-bold mb-1"><span class="' + (isDone ? 'text-emerald-600' : 'text-teal-700') + '">' + formatRp(col) + '</span><span>' + pct.toFixed(1) + '%</span></div><div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div class="' + (isDone ? 'bg-emerald-500' : 'bg-teal-500') + ' h-2" style="width:' + Math.min(pct, 100) + '%"></div></div></div>' + (isDone ? '<span class="inline-block mt-2 text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded">🎉 Target Tercapai!</span>' : '') + '</div><div class="pt-2 border-t flex gap-1.5"><input type="number" id="input-setor-' + i + '" placeholder="Nominal Setoran" class="border p-2 rounded-xl text-xs w-full"><button onclick="setorTabungan(' + idArg + ', \'' + tArg + '\', \'input-setor-' + i + '\', ' + col + ')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold active:scale-95">Setor</button></div></div>';
       }
     }
     async function simpanTargetTabungan() {
       var t = document.getElementById('input-tabungan-tujuan').value.trim(), tg = Number(document.getElementById('input-tabungan-target').value) || 0, aw = Number(document.getElementById('input-tabungan-awal').value) || 0;
       if (!t || tg <= 0) return showToast("Isi nama tujuan & target nominal!", "warning");
       await supabase.from('tabungan').insert([{ tujuan: t, target_nominal: tg, terkumpul: aw }]);
+      if (navigator.vibrate) navigator.vibrate(30);
       showToast("Target tabungan dibuat!"); document.getElementById('input-tabungan-tujuan').value = ''; document.getElementById('input-tabungan-target').value = ''; document.getElementById('input-tabungan-awal').value = ''; loadTabungan();
     }
     async function setorTabungan(id, t, inId, curr) {
@@ -1058,7 +1218,9 @@
       if (val <= 0) return showToast("Masukkan nominal setoran valid!", "warning");
       var q = supabase.from('tabungan').update({ terkumpul: curr + val });
       if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('tujuan', t);
-      await q; showToast("Setoran berhasil!"); loadTabungan();
+      await q; 
+      if (navigator.vibrate) navigator.vibrate(30);
+      showToast("Setoran berhasil!"); loadTabungan();
     }
     async function hapusTargetTabungan(id, t) {
       if (!confirm("Hapus target \"" + t + "\"?")) return;
@@ -1079,6 +1241,65 @@
         type: 'doughnut',
         data: { labels: lbl, datasets: [{ data: val, backgroundColor: isK ? ['#e2e8f0'] : ['#0f766e', '#059669', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'], borderWidth: 2 }] },
         options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }, tooltip: { enabled: !isK, callbacks: { label: function(c) { return ' ' + c.label + ': ' + formatRp(c.raw); } } } } }
+      });
+    }
+
+    // ----------------- PULL TO REFRESH GESTURE LOGIC -----------------
+    var scrollContainer = document.getElementById('main-scroll-container');
+    var ptrIndicator = document.getElementById('ptr-indicator');
+    var ptrIcon = document.getElementById('ptr-icon');
+    var ptrText = document.getElementById('ptr-text');
+    var touchStartY = 0;
+    var isPulling = false;
+    var pullDelta = 0;
+    var PTR_THRESHOLD = 65;
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('touchstart', function(e) {
+        if (scrollContainer.scrollTop === 0) {
+          touchStartY = e.touches[0].clientY;
+          isPulling = true;
+        } else {
+          isPulling = false;
+        }
+      }, { passive: true });
+
+      scrollContainer.addEventListener('touchmove', function(e) {
+        if (!isPulling) return;
+        var currentY = e.touches[0].clientY;
+        var diff = currentY - touchStartY;
+        if (diff > 0 && scrollContainer.scrollTop === 0) {
+          pullDelta = Math.min(diff * 0.45, 80);
+          if (ptrIndicator) ptrIndicator.style.height = pullDelta + 'px';
+          if (pullDelta >= PTR_THRESHOLD * 0.45) {
+            if (ptrIcon) ptrIcon.style.transform = 'rotate(180deg)';
+            if (ptrText) ptrText.innerText = 'Lepaskan untuk memuat ulang';
+          } else {
+            if (ptrIcon) ptrIcon.style.transform = 'rotate(0deg)';
+            if (ptrText) ptrText.innerText = 'Tarik ke bawah untuk memuat ulang...';
+          }
+        }
+      }, { passive: true });
+
+      scrollContainer.addEventListener('touchend', function() {
+        if (!isPulling) return;
+        isPulling = false;
+        if (pullDelta >= PTR_THRESHOLD * 0.45) {
+          if (ptrIndicator) ptrIndicator.style.height = '42px';
+          if (ptrIcon) { ptrIcon.className = 'fas fa-spinner fa-spin'; ptrIcon.style.transform = 'rotate(0deg)'; }
+          if (ptrText) ptrText.innerText = 'Memperbarui data...';
+          if (navigator.vibrate) navigator.vibrate(25);
+          refreshAll().finally(function() {
+            setTimeout(function() {
+              if (ptrIndicator) ptrIndicator.style.height = '0px';
+              if (ptrIcon) ptrIcon.className = 'fas fa-arrow-down transition-transform duration-200';
+              if (ptrText) ptrText.innerText = 'Tarik ke bawah untuk memuat ulang...';
+            }, 350);
+          });
+        } else {
+          if (ptrIndicator) ptrIndicator.style.height = '0px';
+        }
+        pullDelta = 0;
       });
     }
 

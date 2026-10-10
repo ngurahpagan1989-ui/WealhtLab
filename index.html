@@ -7,20 +7,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💎</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<<<<<<< HEAD
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- CDN Supabase JS v2 (Link Absolut Anti-Redirect & Fallback UMD) -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2.46.1/dist/umd/supabase.min.js"></script>
-  <script>if (!window.supabase) document.write('<script src="https://unpkg.com/@supabase/supabase-js@2.46.1/dist/umd/supabase.js"><\/script>');</script>
-  <!-- CDN Utility Libraries -->
-=======
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- CDN Wajib Anti-Blokir: Supabase JS v2 via Fastly jsdelivr -->
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.46.1/dist/umd/supabase.min.js"></script>
-
-  <!-- CDN Tailwind CSS -->
->>>>>>> 505c87ae2d1caef1c08c8637cc5ae4286383cf73
+  <!-- CDN Utility Libraries (Bypass CDN Supabase: Menggunakan Native Fetch REST API) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -57,7 +45,7 @@
       </nav>
     </div>
     <div class="p-3 m-3 rounded-xl bg-teal-900/40 text-[11px] text-teal-200 border border-teal-800/40 flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Supabase Cloud Connected</span>
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Supabase REST API Direct</span>
     </div>
   </aside>
 
@@ -231,22 +219,127 @@
   </div>
 
   <script>
-    // ================= GLOBAL STATE & INISIALISASI KEBAL JARINGAN =================
+    // ----------------- GLOBAL STATE & INISIALISASI KEBAL JARINGAN -----------------
     var myChart = null, allTransactions = [], cachedBudgetData = [], cachedHutangData = [], cachedTabunganData = [];
     var editingBudgetId = null, isSemuaWaktu = false;
     var SUPABASE_URL = "https://zvcdismojoqwgczjrqaa.supabase.co";
     var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2Y2Rpc21vam9xd2djempycWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2MTgxOTEsImV4cCI6MjEwNzE5NDE5MX0.8Wprk5Pg1mOGithyv_1QcgxFSuIBs7ynzV1gXuDPGZQ";
 
-    var supabase = null;
-    try {
-      if (typeof window !== 'undefined' && window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      } else {
-        console.warn("Library Supabase (window.supabase) tidak tersedia atau bernilai null/undefined.");
+    // ----------------- CLIENT NATIVE FETCH (BYPASS TOTAL CDN SUPABASE) -----------------
+    var supabaseHeaders = {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+      "Content-Type": "application/json"
+    };
+
+    var supabase = {
+      from: function(tableName) {
+        var base = SUPABASE_URL + "/rest/v1/" + tableName;
+        return {
+          select: function(cols) {
+            var c = cols || "*";
+            var orderParam = "";
+            var queryRunner = {
+              order: function(col, opts) {
+                var dir = (opts && opts.ascending === false) ? ".desc" : ".asc";
+                orderParam = "&order=" + encodeURIComponent(col) + dir;
+                return execSelect();
+              },
+              then: function(resolve, reject) {
+                return execSelect().then(resolve, reject);
+              }
+            };
+            function execSelect() {
+              return fetch(base + "?select=" + encodeURIComponent(c) + orderParam, {
+                method: "GET",
+                headers: supabaseHeaders
+              }).then(function(res) {
+                return res.json().then(function(json) {
+                  return res.ok ? { data: json, error: null } : { data: null, error: json };
+                });
+              }).catch(function(err) {
+                console.warn("REST Select error:", err);
+                return { data: null, error: err };
+              });
+            }
+            return queryRunner;
+          },
+          insert: function(records) {
+            return fetch(base, {
+              method: "POST",
+              headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+              body: JSON.stringify(records)
+            }).then(function(res) {
+              return res.json().then(function(json) {
+                return res.ok ? { data: json, error: null } : { data: null, error: json };
+              });
+            }).catch(function(err) {
+              console.warn("REST Insert error:", err);
+              return { data: null, error: err };
+            });
+          },
+          update: function(updates) {
+            return {
+              eq: function(col, val) {
+                var q = "?" + encodeURIComponent(col) + "=eq." + encodeURIComponent(val);
+                return fetch(base + q, {
+                  method: "PATCH",
+                  headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+                  body: JSON.stringify(updates)
+                }).then(function(res) {
+                  return res.ok ? { data: null, error: null } : res.json().then(function(j) { return { data: null, error: j }; });
+                }).catch(function(err) {
+                  console.warn("REST Update error:", err);
+                  return { data: null, error: err };
+                });
+              },
+              ilike: function(col, val) {
+                var q = "?" + encodeURIComponent(col) + "=ilike." + encodeURIComponent(val);
+                return fetch(base + q, {
+                  method: "PATCH",
+                  headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+                  body: JSON.stringify(updates)
+                }).then(function(res) {
+                  return res.ok ? { data: null, error: null } : res.json().then(function(j) { return { data: null, error: j }; });
+                }).catch(function(err) {
+                  console.warn("REST Update error:", err);
+                  return { data: null, error: err };
+                });
+              }
+            };
+          },
+          delete: function() {
+            return {
+              eq: function(col, val) {
+                var q = "?" + encodeURIComponent(col) + "=eq." + encodeURIComponent(val);
+                return fetch(base + q, {
+                  method: "DELETE",
+                  headers: supabaseHeaders
+                }).then(function(res) {
+                  return res.ok ? { data: null, error: null } : res.json().then(function(j) { return { data: null, error: j }; });
+                }).catch(function(err) {
+                  console.warn("REST Delete error:", err);
+                  return { data: null, error: err };
+                });
+              },
+              ilike: function(col, val) {
+                var q = "?" + encodeURIComponent(col) + "=ilike." + encodeURIComponent(val);
+                return fetch(base + q, {
+                  method: "DELETE",
+                  headers: supabaseHeaders
+                }).then(function(res) {
+                  return res.ok ? { data: null, error: null } : res.json().then(function(j) { return { data: null, error: j }; });
+                }).catch(function(err) {
+                  console.warn("REST Delete error:", err);
+                  return { data: null, error: err };
+                });
+              }
+            };
+          }
+        };
       }
-    } catch (err) {
-      console.warn("Gagal menyambung ke Supabase:", err);
-    }
+    };
+    window.supabase = supabase;
 
     // Toast notification
     function showToast(msg, type) {
@@ -302,10 +395,6 @@
     // Sinkronisasi data
     async function refreshAll() {
       var l = document.getElementById('loading'), mc = document.getElementById('main-content');
-      if (!supabase) {
-        if (l) l.innerHTML = '<div class="p-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl max-w-sm mx-auto text-xs"><i class="fas fa-exclamation-triangle text-amber-500 text-xl block mb-1"></i>Supabase offline / CDN terhambat. Navigasi tetap aktif.</div>';
-        return;
-      }
       if (l) l.classList.remove('hidden'); if (mc) mc.classList.add('hidden');
       try {
         await Promise.all([loadTransaksi(), loadBudget(), loadHutangPiutang(), loadTabungan()]);
@@ -325,9 +414,9 @@
       return { id: r.id || null, tanggal: r.tanggal || "", deskripsi: r.deskripsi || "", kategori: r.kategori || "", nominal: nom, metode: r.metode || "-", dompet: dmp, tipe: tip, catatan: r.catatan || "-", isKeluar: tip.toLowerCase() !== 'pemasukan' };
     }
     async function loadTransaksi() {
-      if (!supabase) return;
       var res = await supabase.from('transaksi').select('*').order('tanggal', { ascending: false });
       if (!res.error) processData(res.data || []);
+      else console.warn("Transaksi error:", res.error);
     }
     function processData(rows) {
       allTransactions = rows || [];
@@ -402,16 +491,15 @@
     function tutupModalTransaksi() { document.getElementById('modal-transaksi').classList.add('hidden'); }
     async function submitTransaksi(e) {
       if (e) e.preventDefault();
-      if (!supabase) return showToast("Supabase belum terhubung!", "error");
       var p = { tanggal: document.getElementById('trans-tanggal').value, deskripsi: document.getElementById('trans-deskripsi').value.trim(), tipe: document.getElementById('trans-tipe').value, dompet: document.getElementById('trans-dompet').value, nominal: parseFloat(document.getElementById('trans-nominal').value) || 0, metode: document.getElementById('trans-metode').value, kategori: document.getElementById('trans-kategori').value.trim() || 'Lain-lain', catatan: document.getElementById('trans-catatan').value.trim() || '-' };
       var res = await supabase.from('transaksi').insert([p]);
-      if (res.error) showToast("Gagal: " + res.error.message, "error");
+      if (res.error) showToast("Gagal: " + (res.error.message || res.error), "error");
       else { showToast("Transaksi tersimpan!"); tutupModalTransaksi(); document.getElementById('form-tambah-transaksi').reset(); loadTransaksi(); }
     }
     async function hapusTransaksi(id, desc) {
-      if (!confirm("Hapus transaksi \"" + desc + "\"?") || !supabase) return;
+      if (!confirm("Hapus transaksi \"" + desc + "\"?")) return;
       var res = await supabase.from('transaksi').delete().eq('id', id);
-      if (res.error) showToast("Gagal hapus: " + res.error.message, "error");
+      if (res.error) showToast("Gagal hapus: " + (res.error.message || res.error), "error");
       else { showToast("Transaksi dihapus!"); loadTransaksi(); }
     }
     function exportExcel() { var t = document.getElementById('tabel-semua-transaksi'); if (t) { XLSX.writeFile(XLSX.utils.table_to_book(t, { sheet: "Transaksi" }), "WealthLab_Transaksi.xlsx"); showToast("File Excel diunduh!"); } }
@@ -429,9 +517,9 @@
       return res;
     }
     async function loadBudget() {
-      if (!supabase) return;
       var res = await supabase.from('budget').select('*').order('kategori', { ascending: true });
       if (!res.error) tampilkanBudget(res.data || []);
+      else console.warn("Budget error:", res.error);
     }
     function tampilkanBudget(data) {
       cachedBudgetData = data || [];
@@ -452,7 +540,6 @@
     function editBudget(kat, lim, th, id) { editingBudgetId = id; document.getElementById('input-kategori').value = kat; document.getElementById('input-limit').value = lim; document.getElementById('input-threshold').value = th; document.getElementById('btn-simpan-text').innerText = "Update"; document.getElementById('btn-batal-budget').classList.remove('hidden'); }
     function batalEditBudget() { editingBudgetId = null; document.getElementById('input-kategori').value = ''; document.getElementById('input-limit').value = ''; document.getElementById('btn-simpan-text').innerText = "Simpan"; document.getElementById('btn-batal-budget').classList.add('hidden'); }
     async function simpanBudget() {
-      if (!supabase) return showToast("Supabase belum terhubung!", "error");
       var k = document.getElementById('input-kategori').value.trim(), l = Number(document.getElementById('input-limit').value) || 0, th = Number(document.getElementById('input-threshold').value) || 80;
       if (!k || l <= 0) return showToast("Isi kategori dan limit!", "warning");
       if (editingBudgetId) await supabase.from('budget').update({ kategori: k, limit_nominal: l, threshold: th }).eq('id', editingBudgetId);
@@ -460,7 +547,7 @@
       showToast("Budget tersimpan!"); batalEditBudget(); loadBudget();
     }
     async function hapusBudget(k, id) {
-      if (!confirm("Hapus limit kategori \"" + k + "\"?") || !supabase) return;
+      if (!confirm("Hapus limit kategori \"" + k + "\"?")) return;
       var q = supabase.from('budget').delete();
       if (id && id !== 'null') q = q.eq('id', id); else q = q.ilike('kategori', k);
       await q; showToast("Budget dihapus!"); loadBudget();
@@ -468,9 +555,9 @@
 
     // 3. MODUL HUTANG & PIUTANG
     async function loadHutangPiutang() {
-      if (!supabase) return;
       var res = await supabase.from('hutang_piutang').select('*').order('tanggal', { ascending: false });
       if (!res.error) tampilkanHutangPiutang(res.data || []);
+      else console.warn("Hutang error:", res.error);
     }
     function tampilkanHutangPiutang(data) {
       cachedHutangData = data || [];
@@ -489,7 +576,6 @@
       document.getElementById('total-piutang').innerText = formatRp(tP);
     }
     async function simpanHutangPiutang() {
-      if (!supabase) return showToast("Supabase belum terhubung!", "error");
       var tgl = document.getElementById('input-hp-tanggal').value || new Date().toISOString().split('T')[0];
       var nama = document.getElementById('input-hp-nama').value.trim(), tipe = document.getElementById('input-hp-tipe').value, nom = Number(document.getElementById('input-hp-nominal').value) || 0, ket = document.getElementById('input-hp-keterangan').value.trim() || '-';
       if (!nama || nom <= 0) return showToast("Isi nama dan nominal!", "warning");
@@ -497,13 +583,13 @@
       showToast("Catatan tersimpan!"); document.getElementById('input-hp-nama').value = ''; document.getElementById('input-hp-nominal').value = ''; loadHutangPiutang();
     }
     async function tandaiLunasHutang(id, nama) {
-      if (!confirm("Tandai lunas catatan \"" + nama + "\"?") || !supabase) return;
+      if (!confirm("Tandai lunas catatan \"" + nama + "\"?")) return;
       var q = supabase.from('hutang_piutang').update({ status: 'Lunas' });
       if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('nama', nama);
       await q; showToast("Status lunas diperbarui!"); loadHutangPiutang();
     }
     async function hapusHutang(id, nama) {
-      if (!confirm("Hapus catatan \"" + nama + "\"?") || !supabase) return;
+      if (!confirm("Hapus catatan \"" + nama + "\"?")) return;
       var q = supabase.from('hutang_piutang').delete();
       if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('nama', nama);
       await q; showToast("Catatan dihapus!"); loadHutangPiutang();
@@ -511,9 +597,9 @@
 
     // 4. MODUL TABUNGAN
     async function loadTabungan() {
-      if (!supabase) return;
       var res = await supabase.from('tabungan').select('*').order('created_at', { ascending: true });
       if (!res.error) tampilkanTabungan(res.data || []);
+      else console.warn("Tabungan error:", res.error);
     }
     function tampilkanTabungan(data) {
       cachedTabunganData = data || [];
@@ -528,14 +614,12 @@
       }
     }
     async function simpanTargetTabungan() {
-      if (!supabase) return showToast("Supabase belum terhubung!", "error");
       var t = document.getElementById('input-tabungan-tujuan').value.trim(), tg = Number(document.getElementById('input-tabungan-target').value) || 0, aw = Number(document.getElementById('input-tabungan-awal').value) || 0;
       if (!t || tg <= 0) return showToast("Isi nama tujuan & target nominal!", "warning");
       await supabase.from('tabungan').insert([{ tujuan: t, target_nominal: tg, terkumpul: aw }]);
       showToast("Target tabungan dibuat!"); document.getElementById('input-tabungan-tujuan').value = ''; document.getElementById('input-tabungan-target').value = ''; document.getElementById('input-tabungan-awal').value = ''; loadTabungan();
     }
     async function setorTabungan(id, t, inId, curr) {
-      if (!supabase) return showToast("Supabase belum terhubung!", "error");
       var el = document.getElementById(inId), val = Number(el ? el.value : 0) || 0;
       if (val <= 0) return showToast("Masukkan nominal setoran valid!", "warning");
       var q = supabase.from('tabungan').update({ terkumpul: curr + val });
@@ -543,7 +627,7 @@
       await q; showToast("Setoran berhasil!"); loadTabungan();
     }
     async function hapusTargetTabungan(id, t) {
-      if (!confirm("Hapus target \"" + t + "\"?") || !supabase) return;
+      if (!confirm("Hapus target \"" + t + "\"?")) return;
       var q = supabase.from('tabungan').delete();
       if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('tujuan', t);
       await q; showToast("Target dihapus!"); loadTabungan();

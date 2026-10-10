@@ -102,7 +102,7 @@
               </p>
             </div>
 
-            <!-- Card 3: Saldo Bersih Pribadi (Biru / Teal) -->
+            <!-- Card 3: Saldo Bersih Pribadi -->
             <div class="bg-gradient-to-br from-teal-600 to-cyan-800 p-5 rounded-2xl shadow-lg text-white flex flex-col justify-between relative overflow-hidden">
               <div class="relative z-10">
                 <div class="flex items-center justify-between mb-1">
@@ -119,7 +119,7 @@
               </div>
             </div>
 
-            <!-- Card 4: Saldo Bersih Bisnis (Emas / Ungu) -->
+            <!-- Card 4: Saldo Bersih Bisnis -->
             <div class="bg-gradient-to-br from-amber-500 via-purple-700 to-indigo-900 p-5 rounded-2xl shadow-lg text-white flex flex-col justify-between relative overflow-hidden">
               <div class="relative z-10">
                 <div class="flex items-center justify-between mb-1">
@@ -154,7 +154,6 @@
         <!-- VIEW: TRANSAKSI -->
         <div id="view-transaksi" class="view-section hidden space-y-6">
           <div id="area-cetak-laporan" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <!-- Header Riwayat Transaksi -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
               <div>
                 <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -164,115 +163,44 @@
               </div>
             </div>
 
-            <!-- 1. Action Bar Terpusat (Toolbar) -->
             <div data-html2canvas-ignore="true" class="bg-slate-50/80 border border-gray-200/80 p-4 rounded-2xl mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xs">
               <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
                 <div class="relative flex-1 sm:w-64 min-w-[200px]">
                   <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                  <input 
-                    type="text" 
-                    id="search-tag" 
-                    oninput="filterTransaksi()" 
-                    placeholder="Cari tag (#Tag) atau kata kunci..." 
-                    class="w-full pl-10 pr-9 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs"
-                  />
-                  <button 
-                    type="button" 
-                    onclick="clearSearch()" 
-                    id="btn-clear-search" 
-                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
-                    title="Hapus pencarian">
-                    <i class="fas fa-times text-xs"></i>
-                  </button>
+                  <input type="text" id="search-tag" oninput="filterTransaksi()" placeholder="Cari tag (#Tag) atau kata kunci..." class="w-full pl-10 pr-9 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-xs" />
+                  <button type="button" onclick="clearSearch()" id="btn-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition" title="Hapus pencarian"><i class="fas fa-times text-xs"></i></button>
                 </div>
 
                 <div class="flex items-center gap-2">
-                  <input 
-                    type="month" 
-                    id="filter-bulan" 
-                    onchange="onFilterBulanChange()" 
-                    class="py-2 px-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-gray-700 cursor-pointer shadow-xs"
-                    title="Pilih Bulan & Tahun"
-                  />
-                  <button 
-                    type="button" 
-                    id="btn-semua-waktu" 
-                    onclick="setSemuaWaktu()" 
-                    class="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-gray-600 border border-gray-200 px-3.5 py-2 rounded-xl text-sm font-medium transition shadow-xs whitespace-nowrap"
-                    title="Tampilkan transaksi dari semua waktu">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Semua Waktu</span>
-                  </button>
+                  <input type="month" id="filter-bulan" onchange="onFilterBulanChange()" class="py-2 px-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-gray-700 cursor-pointer shadow-xs" title="Pilih Bulan & Tahun" />
+                  <button type="button" id="btn-semua-waktu" onclick="setSemuaWaktu()" class="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-gray-600 border border-gray-200 px-3.5 py-2 rounded-xl text-sm font-medium transition shadow-xs whitespace-nowrap" title="Tampilkan transaksi dari semua waktu"><i class="fas fa-calendar-alt"></i><span>Semua Waktu</span></button>
                 </div>
               </div>
 
               <div class="flex items-center gap-2 self-end lg:self-auto">
-                <button 
-                  type="button" 
-                  onclick="exportExcel()" 
-                  class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-3.5 py-2 rounded-xl text-sm font-semibold shadow-xs hover:shadow transition whitespace-nowrap">
-                  <i class="fas fa-file-excel"></i>
-                  <span>Export Excel</span>
-                </button>
-                <button 
-                  type="button" 
-                  onclick="exportPDF()" 
-                  class="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white px-3.5 py-2 rounded-xl text-sm font-semibold shadow-xs hover:shadow transition whitespace-nowrap">
-                  <i class="fas fa-file-pdf"></i>
-                  <span>Export PDF</span>
-                </button>
+                <button type="button" onclick="exportExcel()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white px-3.5 py-2 rounded-xl text-sm font-semibold shadow-xs hover:shadow transition whitespace-nowrap"><i class="fas fa-file-excel"></i><span>Export Excel</span></button>
+                <button type="button" onclick="exportPDF()" class="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white px-3.5 py-2 rounded-xl text-sm font-semibold shadow-xs hover:shadow transition whitespace-nowrap"><i class="fas fa-file-pdf"></i><span>Export PDF</span></button>
               </div>
             </div>
 
-            <!-- 2. Mini HUD (3 Card Ringkasan Dinamis) -->
             <div data-html2canvas-ignore="false" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <div class="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 border border-emerald-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
-                <div>
-                  <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <i class="fas fa-arrow-circle-down text-emerald-500"></i> Pemasukan
-                  </p>
-                  <h4 id="filter-total-masuk" class="text-xl lg:text-2xl font-black text-gray-800">Rp 0</h4>
-                  <p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Data terfilter
-                  </p>
-                </div>
-                <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0">
-                  <i class="fas fa-wallet"></i>
-                </div>
+                <div><p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1 flex items-center gap-1.5"><i class="fas fa-arrow-circle-down text-emerald-500"></i> Pemasukan</p><h4 id="filter-total-masuk" class="text-xl lg:text-2xl font-black text-gray-800">Rp 0</h4><p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Data terfilter</p></div>
+                <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0"><i class="fas fa-wallet"></i></div>
               </div>
 
               <div class="bg-gradient-to-br from-rose-50 via-white to-rose-50/40 border border-rose-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
-                <div>
-                  <p class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <i class="fas fa-arrow-circle-up text-rose-500"></i> Pengeluaran
-                  </p>
-                  <h4 id="filter-total-keluar" class="text-xl lg:text-2xl font-black text-gray-800">Rp 0</h4>
-                  <p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Data terfilter
-                  </p>
-                </div>
-                <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0">
-                  <i class="fas fa-receipt"></i>
-                </div>
+                <div><p class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 flex items-center gap-1.5"><i class="fas fa-arrow-circle-up text-rose-500"></i> Pengeluaran</p><h4 id="filter-total-keluar" class="text-xl lg:text-2xl font-black text-gray-800">Rp 0</h4><p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Data terfilter</p></div>
+                <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0"><i class="fas fa-receipt"></i></div>
               </div>
 
               <div class="bg-gradient-to-br from-teal-50 via-white to-cyan-50/40 border border-teal-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between transition hover:shadow-sm">
-                <div>
-                  <p class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <i class="fas fa-scale-balanced text-teal-500"></i> Arus Kas / Selisih
-                  </p>
-                  <h4 id="filter-saldo-bersih" class="text-xl lg:text-2xl font-black text-teal-700">Rp 0</h4>
-                  <p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span> Pemasukan - Pengeluaran
-                  </p>
-                </div>
-                <div class="w-11 h-11 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0">
-                  <i class="fas fa-balance-scale"></i>
-                </div>
+                <div><p class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-1 flex items-center gap-1.5"><i class="fas fa-scale-balanced text-teal-500"></i> Arus Kas / Selisih</p><h4 id="filter-saldo-bersih" class="text-xl lg:text-2xl font-black text-teal-700">Rp 0</h4><p class="text-[11px] text-gray-400 mt-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span> Pemasukan - Pengeluaran</p></div>
+                <div class="w-11 h-11 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-lg shadow-inner flex-shrink-0"><i class="fas fa-balance-scale"></i></div>
               </div>
             </div>
 
-            <!-- 3. Mode Desktop -->
+            <!-- Mode Desktop -->
             <div class="hidden md:block overflow-x-auto rounded-xl border border-gray-100 shadow-xs max-h-[600px] overflow-y-auto">
               <table id="tabel-semua-transaksi" class="w-full text-left text-sm whitespace-nowrap">
                 <thead class="text-gray-500 bg-white sticky top-0 z-10 shadow-xs border-b border-gray-200">
@@ -289,58 +217,37 @@
               </table>
             </div>
 
-            <!-- 3. Mode Mobile -->
+            <!-- Mode Mobile -->
             <div id="mobile-transaction-list" class="flex flex-col gap-3 md:hidden"></div>
           </div>
         </div>
 
-        <!-- VIEW: TARGET KEUANGAN (BUDGET SETTINGS) -->
+        <!-- VIEW: BUDGET SETTINGS -->
         <div id="view-target" class="view-section hidden space-y-6">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
               <div>
-                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <i class="fas fa-bullseye text-teal-500"></i> Target & Limit Budget Bulanan
-                </h3>
+                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-bullseye text-teal-500"></i> Target & Limit Budget Bulanan</h3>
                 <p class="text-xs text-gray-500 mt-0.5">Kelola batas pengeluaran bulanan per kategori dan pantau pemakaian secara real-time</p>
               </div>
             </div>
             
-            <!-- Form Input & Edit Budget -->
             <div class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 mb-6">
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Kategori</label>
-                  <input type="text" id="input-kategori" placeholder="Misal: Operasional" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Limit Bulanan (Rp)</label>
-                  <input type="number" id="input-limit" placeholder="Misal: 5000000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Batas Peringatan (%)</label>
-                  <input type="number" id="input-threshold" value="80" min="1" max="100" placeholder="Default: 80" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Kategori</label><input type="text" id="input-kategori" placeholder="Misal: Operasional" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Limit Bulanan (Rp)</label><input type="number" id="input-limit" placeholder="Misal: 5000000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Batas Peringatan (%)</label><input type="number" id="input-threshold" value="80" min="1" max="100" placeholder="Default: 80" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
               </div>
               <div class="flex items-center gap-2 justify-end">
                 <button type="button" onclick="batalEditBudget()" id="btn-batal-budget" class="hidden text-gray-500 hover:text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">Batal</button>
-                <button type="button" onclick="simpanBudget()" id="btn-simpan" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2">
-                  <i class="fas fa-save"></i> <span id="btn-simpan-text">Simpan Budget</span>
-                </button>
+                <button type="button" onclick="simpanBudget()" id="btn-simpan" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2"><i class="fas fa-save"></i> <span id="btn-simpan-text">Simpan Budget</span></button>
               </div>
             </div>
             
-            <!-- Tabel Pemantauan Budget & Aksi CRUD -->
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap border-t border-gray-100">
                 <thead class="text-gray-500 bg-gray-50/80">
-                  <tr>
-                    <th class="px-4 py-3 font-semibold rounded-l-lg">Kategori</th>
-                    <th class="px-4 py-3 font-semibold">Pemakaian Bulan Ini</th>
-                    <th class="px-4 py-3 font-semibold text-right">Limit Bulanan</th>
-                    <th class="px-4 py-3 font-semibold text-center">Batas Peringatan</th>
-                    <th class="px-4 py-3 font-semibold text-center rounded-r-lg">Aksi</th>
-                  </tr>
+                  <tr><th class="px-4 py-3 font-semibold rounded-l-lg">Kategori</th><th class="px-4 py-3 font-semibold">Pemakaian Bulan Ini</th><th class="px-4 py-3 font-semibold text-right">Limit Bulanan</th><th class="px-4 py-3 font-semibold text-center">Batas Peringatan</th><th class="px-4 py-3 font-semibold text-center rounded-r-lg">Aksi</th></tr>
                 </thead>
                 <tbody id="tbody-budget" class="divide-y divide-gray-100"></tbody>
               </table>
@@ -353,83 +260,40 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-rose-500">
               <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Hutang (Belum Lunas)</p>
-                  <h3 id="total-hutang" class="text-2xl font-black text-rose-600">Rp 0</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500 text-xl">
-                  <i class="fas fa-file-invoice-dollar"></i>
-                </div>
+                <div><p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Hutang (Belum Lunas)</p><h3 id="total-hutang" class="text-2xl font-black text-rose-600">Rp 0</h3></div>
+                <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500 text-xl"><i class="fas fa-file-invoice-dollar"></i></div>
               </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-emerald-500">
               <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Piutang (Belum Lunas)</p>
-                  <h3 id="total-piutang" class="text-2xl font-black text-emerald-600">Rp 0</h3>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 text-xl">
-                  <i class="fas fa-hand-holding-usd"></i>
-                </div>
+                <div><p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Piutang (Belum Lunas)</p><h3 id="total-piutang" class="text-2xl font-black text-emerald-600">Rp 0</h3></div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 text-xl"><i class="fas fa-hand-holding-usd"></i></div>
               </div>
             </div>
           </div>
 
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-              <div>
-                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <i class="fas fa-hand-holding-usd text-teal-500"></i> Catatan Hutang & Piutang
-                </h3>
-                <p class="text-xs text-gray-500 mt-0.5">Kelola kewajiban hutang dan tagihan piutang dengan pelacakan status pelunasan</p>
-              </div>
+              <div><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-hand-holding-usd text-teal-500"></i> Catatan Hutang & Piutang</h3><p class="text-xs text-gray-500 mt-0.5">Kelola kewajiban hutang dan tagihan piutang dengan pelacakan status pelunasan</p></div>
             </div>
 
             <div class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 mb-6">
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Tanggal</label>
-                  <input type="date" id="input-hp-tanggal" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Pihak</label>
-                  <input type="text" id="input-hp-nama" placeholder="Misal: Budi / Toko Maju" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Tipe</label>
-                  <select id="input-hp-tipe" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                    <option value="Hutang">Hutang (Saya Berhutang)</option>
-                    <option value="Piutang">Piutang (Orang Lain Berhutang)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Nominal (Rp)</label>
-                  <input type="number" id="input-hp-nominal" placeholder="Misal: 500000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Keterangan</label>
-                  <input type="text" id="input-hp-keterangan" placeholder="Misal: Pinjaman modal usaha" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Tanggal</label><input type="date" id="input-hp-tanggal" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Nama Pihak</label><input type="text" id="input-hp-nama" placeholder="Misal: Budi" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Tipe</label><select id="input-hp-tipe" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"><option value="Hutang">Hutang</option><option value="Piutang">Piutang</option></select></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Nominal (Rp)</label><input type="number" id="input-hp-nominal" placeholder="Misal: 500000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Keterangan</label><input type="text" id="input-hp-keterangan" placeholder="Keterangan singkat" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
               </div>
               <div class="flex justify-end">
-                <button type="button" onclick="simpanHutangPiutang()" id="btn-simpan-hp" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2">
-                  <i class="fas fa-save"></i> <span id="btn-simpan-hp-text">Simpan Catatan</span>
-                </button>
+                <button type="button" onclick="simpanHutangPiutang()" id="btn-simpan-hp" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2"><i class="fas fa-save"></i> <span id="btn-simpan-hp-text">Simpan Catatan</span></button>
               </div>
             </div>
 
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap border-t border-gray-100">
                 <thead class="text-gray-500 bg-gray-50/80">
-                  <tr>
-                    <th class="px-4 py-3 font-semibold rounded-l-lg">Tanggal</th>
-                    <th class="px-4 py-3 font-semibold">Nama</th>
-                    <th class="px-4 py-3 font-semibold text-center">Tipe</th>
-                    <th class="px-4 py-3 font-semibold text-right">Nominal</th>
-                    <th class="px-4 py-3 font-semibold text-center">Status</th>
-                    <th class="px-4 py-3 font-semibold">Keterangan</th>
-                    <th class="px-4 py-3 font-semibold text-center rounded-r-lg">Aksi</th>
-                  </tr>
+                  <tr><th class="px-4 py-3 font-semibold rounded-l-lg">Tanggal</th><th class="px-4 py-3 font-semibold">Nama</th><th class="px-4 py-3 font-semibold text-center">Tipe</th><th class="px-4 py-3 font-semibold text-right">Nominal</th><th class="px-4 py-3 font-semibold text-center">Status</th><th class="px-4 py-3 font-semibold">Keterangan</th><th class="px-4 py-3 font-semibold text-center rounded-r-lg">Aksi</th></tr>
                 </thead>
                 <tbody id="tbody-hutang" class="divide-y divide-gray-100"></tbody>
               </table>
@@ -441,33 +305,17 @@
         <div id="view-tabungan" class="view-section hidden space-y-6">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-              <div>
-                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <i class="fas fa-piggy-bank text-teal-500"></i> Target Tabungan Impian
-                </h3>
-                <p class="text-xs text-gray-500 mt-0.5">Rencanakan tabungan masa depan dan pantau progres capaian secara visual</p>
-              </div>
+              <div><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-piggy-bank text-teal-500"></i> Target Tabungan Impian</h3><p class="text-xs text-gray-500 mt-0.5">Rencanakan tabungan masa depan dan pantau progres capaian</p></div>
             </div>
 
             <div class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 mb-6">
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Nama Tujuan Impian</label>
-                  <input type="text" id="input-tabungan-tujuan" placeholder="Misal: Beli Laptop Baru / Umroh" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Target Nominal (Rp)</label>
-                  <input type="number" id="input-tabungan-target" placeholder="Misal: 15000000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-gray-600 mb-1">Saldo Awal Terkumpul (Rp, opsional)</label>
-                  <input type="number" id="input-tabungan-awal" placeholder="0" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                </div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Nama Tujuan Impian</label><input type="text" id="input-tabungan-tujuan" placeholder="Misal: Beli Laptop Baru" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Target Nominal (Rp)</label><input type="number" id="input-tabungan-target" placeholder="Misal: 15000000" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
+                <div><label class="block text-xs font-semibold text-gray-600 mb-1">Saldo Awal Terkumpul (Rp)</label><input type="number" id="input-tabungan-awal" placeholder="0" class="border border-gray-300 p-2.5 rounded-xl w-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"></div>
               </div>
               <div class="flex justify-end">
-                <button type="button" onclick="simpanTargetTabungan()" id="btn-simpan-tabungan" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2">
-                  <i class="fas fa-plus-circle"></i> <span>Buat Target Tabungan</span>
-                </button>
+                <button type="button" onclick="simpanTargetTabungan()" id="btn-simpan-tabungan" class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition shadow-sm flex items-center gap-2"><i class="fas fa-plus-circle"></i> <span>Buat Target Tabungan</span></button>
               </div>
             </div>
 
@@ -498,7 +346,7 @@
       if (typeof window.supabase !== 'undefined') {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       } else {
-        console.warn("Library Supabase terblokir oleh ekstensi browser.");
+        console.warn("Library Supabase terblokir.");
       }
     } catch (err) {
       console.error("Gagal menyambung ke Supabase:", err);
@@ -641,9 +489,8 @@
       const loadingEl = document.getElementById('loading');
       const mainContentEl = document.getElementById('main-content');
       
-      // Stop the process if Supabase wasn't initialized correctly (due to adblockers)
       if (!supabase) {
-        if (loadingEl) loadingEl.innerHTML = '<div class="text-rose-500 font-medium p-4 text-center"><i class="fas fa-exclamation-circle text-3xl mb-3 block"></i> Gagal memuat database.<br>Harap matikan ekstensi Adblocker dan <a href="#" onclick="window.location.reload()" class="underline font-bold">Refresh halaman ini</a>.</div>';
+        if (loadingEl) loadingEl.innerHTML = '<div class="text-rose-500 font-medium p-4 text-center"><i class="fas fa-exclamation-circle text-3xl mb-3 block"></i> Gagal memuat database.<br>Harap cek ekstensi Adblocker dan <a href="#" onclick="window.location.reload()" class="underline font-bold">Refresh halaman ini</a>.</div>';
         return;
       }
 
@@ -682,7 +529,8 @@
         const isKeluar = String(tipe).trim().toLowerCase() !== 'pemasukan';
         return { id: null, tanggal: row[0], deskripsi: row[1] || "", kategori: row[2] || "", nominal: nominal, metode: row[4] || "-", dompet: dompet, tipe: tipe, catatan: catatan, isKeluar: isKeluar };
       }
-      const rawNominal = String(row.nominal ?? 0).replace(/[^0-9.-]+/g, "");
+      
+      const rawNominal = String(row.nominal || 0).replace(/[^0-9.-]+/g, "");
       const nominal = parseFloat(rawNominal) || 0;
       if (nominal === 0 && !row.deskripsi) return null;
       const dompet = row.dompet ? String(row.dompet).trim() : "Pribadi";
@@ -1073,12 +921,12 @@
 
       data.forEach((row) => {
         const id = row.id || null;
-        const kat = String(row.kategori ?? row[0] ?? '').trim();
+        const kat = String(row.kategori || row[0] || '').trim();
         if (!kat || kat.toLowerCase() === 'kategori') return;
 
-        const rawLimit = row.limit_nominal ?? row.limit ?? row[1] ?? 0;
+        const rawLimit = row.limit_nominal || row.limit || row[1] || 0;
         const limRaw = parseFloat(String(rawLimit).replace(/[^0-9.-]+/g, "")) || 0;
-        const rawTh = row.threshold ?? row[2] ?? 80;
+        const rawTh = row.threshold || row[2] || 80;
         const threshold = parseFloat(String(rawTh).replace(/[^0-9.-]+/g, "")) || 80;
 
         const terpakai = expenseMap[kat.toLowerCase()] || 0;
@@ -1193,13 +1041,13 @@
 
       data.forEach((row) => {
         const id = row.id || null;
-        const tgl = row.tanggal ?? row[0] ?? '-';
-        const nama = row.nama ?? row[1] ?? '-';
+        const tgl = row.tanggal || row[0] || '-';
+        const nama = row.nama || row[1] || '-';
         if (!nama || nama.toLowerCase() === 'nama') return;
 
-        const tipe = String(row.tipe ?? row[2] ?? 'Hutang').trim();
-        const nominal = parseFloat(String(row.nominal ?? row[3] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
-        const status = String(row.status ?? row[4] ?? 'Belum Lunas').trim();
+        const tipe = String(row.tipe || row[2] || 'Hutang').trim();
+        const nominal = parseFloat(String(row.nominal || row[3] || 0).replace(/[^0-9.-]+/g, "")) || 0;
+        const status = String(row.status || row[4] || 'Belum Lunas').trim();
         const isLunas = status.toLowerCase() === 'lunas';
 
         if (!isLunas) {
@@ -1219,7 +1067,7 @@
             <td class="px-4 py-4 text-center">${badgeTipe}</td>
             <td class="px-4 py-4 text-right font-bold ${isHutang ? 'text-rose-600' : 'text-emerald-600'}">${formatRp(nominal)}</td>
             <td class="px-4 py-4 text-center">${badgeStatus}</td>
-            <td class="px-4 py-4 text-xs text-gray-600">${row.keterangan ?? row[5] ?? '-'}</td>
+            <td class="px-4 py-4 text-xs text-gray-600">${row.keterangan || row[5] || '-'}</td>
             <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2">${btnLunas}<button onclick="hapusHutang(${id ? `'${id}'` : 'null'}, '${nama.replace(/'/g, "\\'")}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition" title="Hapus Catatan"><i class="fas fa-trash-alt text-xs"></i></button></div></td>
           </tr>`;
       });
@@ -1298,11 +1146,11 @@
 
       data.forEach((row, index) => {
         const id = row.id || null;
-        const tujuan = String(row.tujuan ?? row[0] ?? '').trim();
+        const tujuan = String(row.tujuan || row[0] || '').trim();
         if (!tujuan || tujuan.toLowerCase() === 'tujuan') return;
 
-        const target = parseFloat(String(row.target_nominal ?? row[1] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
-        const terkumpul = parseFloat(String(row.terkumpul ?? row[2] ?? 0).replace(/[^0-9.-]+/g, "")) || 0;
+        const target = parseFloat(String(row.target_nominal || row[1] || 0).replace(/[^0-9.-]+/g, "")) || 0;
+        const terkumpul = parseFloat(String(row.terkumpul || row[2] || 0).replace(/[^0-9.-]+/g, "")) || 0;
         const persentase = target > 0 ? (terkumpul / target) * 100 : 0;
         const widthPercent = Math.min(Math.max(persentase, 0), 100);
         const isTercapai = persentase >= 100;

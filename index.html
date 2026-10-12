@@ -109,6 +109,57 @@
         
         <!-- 1. DASHBOARD -->
         <div id="view-dashboard" class="view-section space-y-5">
+
+          <!-- KARTU RINGKASAN KUOTA BUDGET HARIAN REAL-TIME -->
+          <div id="dash-card-daily-budget" class="bg-gradient-to-br from-slate-900 via-teal-950 to-emerald-950 p-5 rounded-3xl text-white shadow-xl border border-teal-800/50 space-y-4 relative overflow-hidden">
+            <div class="absolute -right-12 -bottom-12 w-48 h-48 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-12 -top-12 w-48 h-48 rounded-full bg-teal-500/15 blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
+                    <i class="fas fa-calendar-day text-amber-400"></i> Kuota Budget Hari Ini
+                  </span>
+                  <span id="dash-daily-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-900/80 text-emerald-300 border border-emerald-500/30">
+                    Aman
+                  </span>
+                  <span id="dash-daily-rule-badge" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-teal-200 border border-white/15">
+                    Otomatis Tambah Tabungan
+                  </span>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="text-xs font-semibold text-teal-200 uppercase tracking-wide">Sisa Kuota:</span>
+                  <h3 id="dash-daily-remaining-val" class="text-2xl sm:text-3xl font-black text-emerald-300 tracking-tight">Rp 0</h3>
+                </div>
+                <p id="dash-daily-breakdown" class="text-xs text-teal-200/80 mt-1">
+                  Limit: <b id="dash-daily-limit-val">Rp 50.000</b> • Terpakai: <b id="dash-daily-spent-val" class="text-rose-300">Rp 0</b> (<span id="dash-daily-count-val">0 transaksi Harian</span>)
+                </p>
+              </div>
+              <div class="flex items-center gap-2 self-start sm:self-center">
+                <button type="button" onclick="bukaModalForm('Manual', { kategori: 'Harian', deskripsi: 'Belanja harian', dompet: 'Pribadi', tipe: 'Pengeluaran' })" class="bg-emerald-500 hover:bg-emerald-400 active:scale-95 transition text-teal-950 font-black px-3.5 py-2 rounded-xl text-xs shadow-md flex items-center gap-1.5">
+                  <i class="fas fa-plus-circle"></i><span>+ Belanja Harian</span>
+                </button>
+                <button type="button" onclick="switchTab('target'); toggleDailyBudgetSettings(true);" class="bg-white/10 hover:bg-white/20 active:scale-95 transition text-white px-3 py-2 rounded-xl text-xs font-semibold border border-white/20 flex items-center gap-1.5" title="Atur Limit Harian">
+                  <i class="fas fa-sliders-h"></i><span>Atur Budget</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Bar Kuota Harian Dashboard -->
+            <div class="bg-black/30 backdrop-blur-md p-3 rounded-2xl border border-white/10 space-y-1.5 relative z-10">
+              <div class="flex justify-between items-center text-xs">
+                <span id="dash-daily-bar-label" class="font-bold text-emerald-300 flex items-center gap-1.5">
+                  <i class="fas fa-smile text-emerald-400"></i> <span>Kuota Masih Tersedia</span>
+                </span>
+                <span id="dash-daily-bar-pct" class="font-black text-teal-200">0% Terpakai</span>
+              </div>
+              <div class="w-full bg-slate-800/80 h-2.5 rounded-full overflow-hidden p-0.5 border border-white/10">
+                <div id="dash-daily-bar-fill" class="h-full rounded-full bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-2xl shadow-xs border border-gray-100 border-t-4 border-t-emerald-500">
               <span class="text-[11px] font-bold text-gray-500 uppercase flex items-center gap-1"><i class="fas fa-arrow-down text-emerald-500"></i> Pemasukan</span>
@@ -192,13 +243,13 @@
               <div>
                 <div class="flex flex-wrap items-center gap-2">
                   <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-xs">
-                    <i class="fas fa-magic text-amber-400"></i> Smart Daily Budget &amp; Rollover
+                    <i class="fas fa-magic text-amber-400"></i> Smart Daily Budget
                   </span>
                   <span id="daily-rule-badge-header" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-teal-200 border border-white/15">
-                    Rollover ke Besok
+                    Otomatis Tambah Tabungan
                   </span>
                 </div>
-                <h3 class="text-lg sm:text-xl font-black tracking-tight text-white mt-1">Budget Harian Fleksibel</h3>
+                <h3 class="text-lg sm:text-xl font-black tracking-tight text-white mt-1">Budget Harian Otomatis</h3>
                 <p class="text-[11px] text-teal-200/80 mt-0.5 flex items-center gap-1.5">
                   <i class="far fa-calendar-check text-emerald-400"></i>
                   <span id="daily-current-date-label">Hari ini, -</span>
@@ -206,11 +257,20 @@
               </div>
               <div class="flex items-center gap-2 self-start sm:self-center">
                 <button type="button" onclick="bukaModalForm('Manual', { kategori: 'Harian', deskripsi: 'Belanja harian', dompet: 'Pribadi', tipe: 'Pengeluaran' })" class="bg-emerald-500 hover:bg-emerald-400 text-teal-950 font-black px-3.5 py-2 rounded-xl text-xs transition active:scale-95 shadow-md flex items-center gap-1.5">
-                  <i class="fas fa-plus-circle"></i><span>+ Pengeluaran Harian</span>
+                  <i class="fas fa-plus-circle"></i><span>+ Belanja Harian</span>
                 </button>
                 <button type="button" onclick="toggleDailyBudgetSettings()" id="btn-toggle-daily-settings" class="bg-white/10 hover:bg-white/20 active:scale-95 transition text-white px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/20">
                   <i class="fas fa-sliders-h"></i><span id="text-toggle-daily-settings">Pengaturan</span>
                 </button>
+              </div>
+            </div>
+
+            <!-- Banner Penjelasan Aturan Input Tunggal -->
+            <div class="bg-teal-950/70 border border-teal-600/40 rounded-2xl p-3.5 text-xs text-teal-200 flex items-start gap-3 relative z-10 shadow-xs">
+              <div class="w-6 h-6 rounded-lg bg-teal-500/20 text-emerald-300 flex items-center justify-center text-xs flex-shrink-0 mt-0.5"><i class="fas fa-lightbulb"></i></div>
+              <div class="leading-relaxed">
+                <span class="font-bold text-white block">Aturan Input Tunggal:</span>
+                Anda <b>cukup menginput pengeluaran via Quick Input transaksi biasa (+)</b>. Jika transaksi memiliki kategori <b>'Harian'</b>, nominal otomatis dihitung memotong sisa kuota hari ini tanpa perlu input dua kali!
               </div>
             </div>
 
@@ -219,7 +279,7 @@
               <!-- 1. Jatah Hari Ini -->
               <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15 flex flex-col justify-between transition hover:border-emerald-500/40">
                 <div class="flex justify-between items-start">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-teal-200/90">Jatah Hari Ini</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-teal-200/90">Limit Hari Ini</span>
                   <div class="w-7 h-7 rounded-lg bg-teal-500/20 text-emerald-300 flex items-center justify-center text-xs"><i class="fas fa-coins"></i></div>
                 </div>
                 <div class="mt-2">
@@ -247,7 +307,7 @@
               <!-- 3. Sisa Hari Ini -->
               <div id="daily-remaining-card" class="bg-emerald-950/70 backdrop-blur-md rounded-2xl p-4 border border-emerald-500/40 flex flex-col justify-between transition">
                 <div class="flex justify-between items-start">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Sisa Hari Ini</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Sisa Kuota Hari Ini</span>
                   <div id="daily-status-icon-box" class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs"><i class="fas fa-check-circle"></i></div>
                 </div>
                 <div class="mt-2">
@@ -272,15 +332,15 @@
               </div>
               <div class="flex justify-between text-[10px] text-teal-300/70 font-medium">
                 <span>Rp 0</span>
-                <span id="daily-bar-max">Jatah: Rp 50.000</span>
+                <span id="daily-bar-max">Limit: Rp 50.000</span>
               </div>
             </div>
 
-            <!-- Form Pengaturan Plafon & Aturan Sisa Budget (Toggleable) -->
+            <!-- Form Pengaturan Pasif (Cukup Disetel Sekali, Tersimpan di localStorage) -->
             <div id="daily-settings-panel" class="hidden bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-teal-700/60 space-y-4 relative z-10">
               <div class="flex justify-between items-center border-b border-teal-800/60 pb-2.5">
                 <h4 class="font-bold text-sm text-teal-100 flex items-center gap-2">
-                  <i class="fas fa-cogs text-teal-400"></i> Pengaturan Budget Harian Fleksibel
+                  <i class="fas fa-cogs text-teal-400"></i> Konfigurasi Budget Pasif (Disetel Sekali)
                 </h4>
                 <button type="button" onclick="toggleDailyBudgetSettings()" class="text-teal-300 hover:text-white p-1 text-xs" aria-label="Tutup Pengaturan">
                   <i class="fas fa-times"></i>
@@ -288,9 +348,9 @@
               </div>
 
               <form id="form-daily-budget-config" onsubmit="event.preventDefault(); simpanDailyBudgetSettings();" class="space-y-4 text-xs">
-                <!-- Plafon Harian -->
+                <!-- Limit Harian -->
                 <div>
-                  <label for="input-daily-limit" class="block font-semibold mb-1 text-teal-200">Plafon Harian (Rp)</label>
+                  <label for="input-daily-limit" class="block font-semibold mb-1 text-teal-200">Limit Harian (Rp)</label>
                   <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                     <input type="number" id="input-daily-limit" required min="1000" step="1000" placeholder="50000" class="flex-1 bg-slate-800 border border-teal-700 p-2.5 rounded-xl text-white font-bold focus:ring-2 focus:ring-emerald-400 outline-none">
                     <div class="flex gap-1.5 flex-wrap">
@@ -300,35 +360,35 @@
                       <button type="button" onclick="setDailyLimitPreset(100000)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-teal-800 text-teal-300 rounded-lg border border-teal-700 text-[11px] font-semibold transition active:scale-95">100rb</button>
                     </div>
                   </div>
-                  <p class="text-[10px] text-teal-300/70 mt-1">Jatah belanja harian dasar untuk kebutuhan konsumsi &amp; operasional harian.</p>
+                  <p class="text-[10px] text-teal-300/70 mt-1">Kuota belanja harian untuk kebutuhan operasional harian / belanja harian.</p>
                 </div>
 
-                <!-- Aturan Sisa Budget (2 Opsi) -->
+                <!-- Opsi Alokasi Sisa (Saat Berganti Hari) -->
                 <div>
-                  <label class="block font-semibold mb-1.5 text-teal-200">Aturan Sisa Budget (Saat Berganti Hari)</label>
+                  <label class="block font-semibold mb-1.5 text-teal-200">Opsi Alokasi Sisa Budget (Sweeper Pergantian Hari)</label>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <label class="flex items-start gap-3 p-3 bg-slate-800/80 rounded-xl border border-teal-700/80 cursor-pointer hover:bg-slate-800 transition">
-                      <input type="radio" name="radio-daily-rule" id="radio-rule-rollover" value="rollover" onchange="onDailyRuleChange()" checked class="mt-1 text-emerald-500 focus:ring-emerald-400">
+                      <input type="radio" name="radio-daily-rule" id="radio-rule-tabungan" value="tabungan" onchange="onDailyRuleChange()" checked class="mt-1 text-emerald-500 focus:ring-emerald-400">
                       <div>
-                        <span class="font-bold text-white block">Rollover ke Besok</span>
-                        <span class="text-[10px] text-teal-300/80 leading-relaxed block mt-0.5">Sisa budget hari ini diakumulasikan menambah limit jatah besok secara otomatis.</span>
+                        <span class="font-bold text-white block">Otomatis Tambah Tabungan</span>
+                        <span class="text-[10px] text-teal-300/80 leading-relaxed block mt-0.5">Sisa kuota kemarin otomatis di-PATCH menambah saldo tabungan &amp; dibuat riwayat 'Pemasukan/Tabungan'.</span>
                       </div>
                     </label>
                     <label class="flex items-start gap-3 p-3 bg-slate-800/80 rounded-xl border border-teal-700/80 cursor-pointer hover:bg-slate-800 transition">
-                      <input type="radio" name="radio-daily-rule" id="radio-rule-tabungan" value="tabungan" onchange="onDailyRuleChange()" class="mt-1 text-emerald-500 focus:ring-emerald-400">
+                      <input type="radio" name="radio-daily-rule" id="radio-rule-rollover" value="rollover" onchange="onDailyRuleChange()" class="mt-1 text-emerald-500 focus:ring-emerald-400">
                       <div>
-                        <span class="font-bold text-white block">Alirkan ke Tabungan</span>
-                        <span class="text-[10px] text-teal-300/80 leading-relaxed block mt-0.5">Sisa budget hari ini otomatis ditambahkan ke nominal terkumpul di salah satu pos tabungan pilihan.</span>
+                        <span class="font-bold text-white block">Akumulasi ke Jatah Besok</span>
+                        <span class="text-[10px] text-teal-300/80 leading-relaxed block mt-0.5">Sisa kuota kemarin diakumulasikan otomatis menambah kuota jatah belanja hari berikutnya.</span>
                       </div>
                     </label>
                   </div>
                 </div>
 
-                <!-- Target Pos Tabungan Pilihan (Muncul jika pilih Alirkan ke Tabungan) -->
-                <div id="container-tabungan-selector" class="hidden bg-slate-800/60 p-3 rounded-xl border border-emerald-500/30 space-y-1.5">
+                <!-- Target Pos Tabungan Pilihan (Muncul jika pilih Otomatis Tambah Tabungan) -->
+                <div id="container-tabungan-selector" class="bg-slate-800/60 p-3 rounded-xl border border-emerald-500/30 space-y-1.5">
                   <label for="select-daily-target-tabungan" class="block font-semibold text-emerald-300">Pilih Pos Tabungan Penerima Sisa</label>
                   <select id="select-daily-target-tabungan" class="w-full bg-slate-800 border border-teal-600 p-2.5 rounded-xl text-white font-medium focus:ring-2 focus:ring-emerald-400 outline-none"></select>
-                  <p class="text-[10px] text-teal-300/70">Setiap pergantian hari, sisa budget akan di-PATCH ke tabungan ini dan dicatat di riwayat transaksi.</p>
+                  <p class="text-[10px] text-teal-300/70">Setiap pergantian hari, sweeper otomatis akan menambah saldo ke tabungan ini via PATCH.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-teal-800/60">
@@ -606,8 +666,19 @@
           <div><label class="block font-semibold mb-1 text-gray-700">Metode</label><select id="form-metode" class="border p-2.5 rounded-xl w-full"><option value="Transfer Bank">Transfer</option><option value="QRIS">QRIS</option><option value="Tunai">Tunai</option><option value="E-Wallet">E-Wallet</option></select></div>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
-          <div><label class="block font-semibold mb-1 text-gray-700">Kategori</label><input type="text" id="form-kategori" required placeholder="Operasional" class="border p-2.5 rounded-xl w-full"></div>
-          <div><label class="block font-semibold mb-1 text-gray-700">Catatan / #Tag</label><input type="text" id="form-catatan" placeholder="#Proyek" class="border p-2.5 rounded-xl w-full"></div>
+          <div>
+            <label class="block font-semibold mb-1 text-gray-700">Kategori</label>
+            <input type="text" id="form-kategori" required placeholder="Harian / Operasional" class="border p-2.5 rounded-xl w-full">
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <button type="button" onclick="setKategoriForm('Harian')" class="text-[10px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-lg border border-emerald-200 transition" title="Kategori Harian otomatis memotong kuota harian">💡 Harian</button>
+              <button type="button" onclick="setKategoriForm('Makanan')" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-gray-700 font-medium px-2 py-0.5 rounded-lg border border-gray-200 transition">Makanan</button>
+              <button type="button" onclick="setKategoriForm('Operasional')" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-gray-700 font-medium px-2 py-0.5 rounded-lg border border-gray-200 transition">Operasional</button>
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-gray-700">Catatan / #Tag</label>
+            <input type="text" id="form-catatan" placeholder="#Proyek" class="border p-2.5 rounded-xl w-full">
+          </div>
         </div>
         <div class="flex justify-end gap-2 pt-3 border-t">
           <button type="button" onclick="tutupModalForm()" class="px-3.5 py-2 text-gray-500 font-medium">Batal</button>
@@ -890,7 +961,7 @@
         var hpTgl = document.getElementById('input-hp-tanggal');
         if (hpTgl && !hpTgl.value) hpTgl.value = new Date().toISOString().split('T')[0];
       }
-      if (name === 'target') {
+      if (name === 'target' || name === 'dashboard') {
         populateTabunganSelectOptions();
         renderDailyBudget();
       }
@@ -931,7 +1002,10 @@
       var nom = parseFloat(String(r.nominal || 0).replace(/[^0-9.-]+/g, "")) || 0;
       var dmp = r.dompet ? String(r.dompet).trim() : "Pribadi";
       var tip = r.tipe ? String(r.tipe).trim() : "Pengeluaran";
-      return { id: r.id || null, tanggal: r.tanggal || "", deskripsi: r.deskripsi || "", kategori: r.kategori || "", nominal: nom, metode: r.metode || "-", dompet: dmp, tipe: tip, catatan: r.catatan || "-", isKeluar: tip.toLowerCase() !== 'pemasukan' };
+      var tipLower = (tip || "").toLowerCase();
+      var isMasuk = tipLower.indexOf('pemasukan') !== -1 || tipLower === 'tabungan';
+      var isKeluar = !isMasuk;
+      return { id: r.id || null, tanggal: r.tanggal || "", deskripsi: r.deskripsi || "", kategori: r.kategori || "", nominal: nom, metode: r.metode || "-", dompet: dmp, tipe: tip, catatan: r.catatan || "-", isKeluar: isKeluar };
     }
 
     async function loadTransaksi() {
@@ -1405,7 +1479,7 @@
 
     // ----------------- MODUL TARGET (BUDGET) -----------------
     // ========================================================
-    // SUB-FITUR: SMART DAILY BUDGET & ROLLOVER LOGIC
+    // SUB-FITUR: SMART DAILY BUDGET & ROLLOVER LOGIC (INPUT TUNGGAL)
     // ========================================================
     function getTodayDateString() {
       var d = new Date();
@@ -1417,27 +1491,58 @@
       return yr + '-' + mo + '-' + da;
     }
 
+    function getYesterdayDateString() {
+      var d = new Date();
+      d.setDate(d.getDate() - 1);
+      var yr = d.getFullYear();
+      var mo = String(d.getMonth() + 1);
+      if (mo.length < 2) mo = '0' + mo;
+      var da = String(d.getDate());
+      if (da.length < 2) da = '0' + da;
+      return yr + '-' + mo + '-' + da;
+    }
+
+    function isKategoriHarian(kat) {
+      if (!kat) return false;
+      var k = String(kat).toLowerCase().trim();
+      return k === 'harian' || 
+             k.indexOf('harian') !== -1 || 
+             k === 'operasional harian' || 
+             k === 'pengeluaran harian' || 
+             k === 'kebutuhan harian' ||
+             k === 'belanja harian';
+    }
+
+    function setKategoriForm(kategoriName) {
+      var el = document.getElementById('form-kategori');
+      if (el) {
+        el.value = kategoriName;
+        el.focus();
+      }
+    }
+
     function getDailyBudgetConfig() {
       var defaultConfig = {
         limit: 50000,
-        rule: 'rollover',
+        rule: 'tabungan', // 'tabungan' (Otomatis Tambah Tabungan) atau 'rollover' (Akumulasi ke Jatah Besok)
         targetTabunganId: '',
         targetTabunganTujuan: '',
         rolloverAccumulated: 0,
-        lastEvaluatedDate: getTodayDateString()
+        last_check_date: ''
       };
       try {
         var raw = localStorage.getItem('wealthlab_daily_budget');
         if (raw) {
           var parsed = JSON.parse(raw);
           if (parsed) {
+            var lastDate = parsed.last_check_date || parsed.lastEvaluatedDate || localStorage.getItem('wealthlab_last_check_date') || '';
             return {
               limit: (typeof parsed.limit === 'number' && parsed.limit > 0) ? parsed.limit : 50000,
-              rule: (parsed.rule === 'tabungan') ? 'tabungan' : 'rollover',
+              rule: (parsed.rule === 'rollover') ? 'rollover' : 'tabungan',
               targetTabunganId: parsed.targetTabunganId || '',
               targetTabunganTujuan: parsed.targetTabunganTujuan || '',
               rolloverAccumulated: (typeof parsed.rolloverAccumulated === 'number') ? parsed.rolloverAccumulated : 0,
-              lastEvaluatedDate: parsed.lastEvaluatedDate || getTodayDateString()
+              last_check_date: lastDate
             };
           }
         }
@@ -1449,6 +1554,11 @@
 
     function saveDailyBudgetConfig(cfg) {
       try {
+        if (!cfg) return;
+        if (cfg.last_check_date) {
+          localStorage.setItem('wealthlab_last_check_date', cfg.last_check_date);
+          cfg.lastEvaluatedDate = cfg.last_check_date;
+        }
         localStorage.setItem('wealthlab_daily_budget', JSON.stringify(cfg));
       } catch (e) {
         console.warn("Gagal menyimpan daily budget config:", e);
@@ -1462,8 +1572,7 @@
       for (var i = 0; i < allTransactions.length; i++) {
         var item = parseRow(allTransactions[i]);
         if (item && item.isKeluar && item.tanggal === targetDate) {
-          var kat = (item.kategori || '').toLowerCase().trim();
-          if (kat === 'harian' || kat.indexOf('harian') !== -1) {
+          if (isKategoriHarian(item.kategori)) {
             total += item.nominal;
             count++;
           }
@@ -1472,32 +1581,44 @@
       return { total: total, count: count };
     }
 
+    // SWEEPER OTOMATIS PERGANTIAN HARI
+    // Berjalan saat aplikasi pertama kali dibuka di tanggal baru
     async function evaluasiDailyRolloverCheck() {
       var todayStr = getTodayDateString();
       var config = getDailyBudgetConfig();
-      var lastDate = config.lastEvaluatedDate;
+      var lastCheckDate = config.last_check_date || localStorage.getItem('wealthlab_last_check_date') || '';
 
-      // Jika baru pertama kali dibuka, inisialisasi tanggal evaluasi ke hari ini
-      if (!lastDate) {
-        config.lastEvaluatedDate = todayStr;
+      // Inisialisasi awal jika belum pernah ada penanda (pertama kali dipasang)
+      if (!lastCheckDate) {
+        config.last_check_date = todayStr;
         saveDailyBudgetConfig(config);
         return;
       }
 
-      // Jika tanggal evaluasi masih sama dengan hari ini, belum terjadi pergantian hari
-      if (lastDate === todayStr) {
+      // Pastikan fungsi pengecekan ini hanya berjalan tepat satu kali per hari
+      if (lastCheckDate === todayStr) {
         return;
       }
 
-      // Evaluasi pergantian hari: periksa jatah dan pengeluaran pada lastDate
-      var spentInfo = getDailySpentAmount(lastDate);
-      var spentYesterday = spentInfo.total;
-      var allowanceYesterday = config.limit + (config.rule === 'rollover' ? (config.rolloverAccumulated || 0) : 0);
-      var sisa = allowanceYesterday - spentYesterday;
+      // Deteksi pergantian hari: evaluasi pemakaian tanggal kemarin
+      var yesterdayStr = getYesterdayDateString();
+      var targetDate = (lastCheckDate && lastCheckDate !== todayStr) ? lastCheckDate : yesterdayStr;
 
+      // 1. Cek total pengeluaran kategori Harian pada tanggal kemarin
+      var spentInfo = getDailySpentAmount(targetDate);
+      var spentYesterday = spentInfo.total;
+      var limitHarian = config.limit || 50000;
+      var allowanceYesterday = limitHarian + (config.rule === 'rollover' ? (config.rolloverAccumulated || 0) : 0);
+
+      // 2. Jika pemakaian < Limit Harian, hitung selisihnya (Sisa)
+      var sisa = 0;
+      if (spentYesterday < allowanceYesterday) {
+        sisa = allowanceYesterday - spentYesterday;
+      }
+
+      // 3. Jika sisa > 0 dan opsi yang aktif adalah Otomatis Tambah Tabungan:
       if (sisa > 0) {
         if (config.rule === 'tabungan') {
-          // OPSI A: ALIRKAN KE TABUNGAN
           var targetId = config.targetTabunganId;
           var targetName = config.targetTabunganTujuan;
           var foundTab = null;
@@ -1529,7 +1650,7 @@
             }
 
             try {
-              // 1. PATCH nominal terkumpul ke Supabase
+              // Eksekusi PATCH untuk menambah saldo di tabel tabungan
               await fetch(patchUrl, {
                 method: "PATCH",
                 headers: {
@@ -1541,16 +1662,16 @@
                 body: JSON.stringify({ terkumpul: newTerkumpul })
               });
 
-              // 2. Buat catatan riwayat transaksi 'Transfer ke Tabungan'
+              // Buat satu baris riwayat di tabel transaksi dengan tipe 'Pemasukan/Tabungan' dan catatan 'Sisa Budget Harian Kemarin'
               var transPayload = [{
                 tanggal: todayStr,
-                deskripsi: "Transfer Sisa Budget Harian (" + formatDt(lastDate) + ") ke Tabungan: " + finalName,
-                tipe: "Pengeluaran",
+                deskripsi: "Sisa Budget Harian Kemarin (" + formatDt(targetDate) + ") ke Tabungan: " + finalName,
+                tipe: "Pemasukan/Tabungan",
                 dompet: "Pribadi",
                 nominal: sisa,
                 metode: "Transfer Bank",
                 kategori: "Tabungan",
-                catatan: "#SmartBudget #AlirkanTabungan"
+                catatan: "Sisa Budget Harian Kemarin"
               }];
 
               await fetch(SUPABASE_URL + "/rest/v1/transaksi", {
@@ -1564,30 +1685,32 @@
                 body: JSON.stringify(transPayload)
               });
 
-              showToast("🎉 Sisa budget (" + formatRp(sisa) + ") dari " + formatDt(lastDate) + " berhasil dialirkan ke tabungan \"" + finalName + "\"!", "success", 9000);
+              showToast("🎉 Sisa budget harian kemarin (" + formatRp(sisa) + ") otomatis ditambahkan ke tabungan \"" + finalName + "\"!", "success", 9000);
               loadTabungan();
               loadTransaksi();
             } catch (errTab) {
-              console.warn("Gagal alirkan sisa budget ke tabungan:", errTab);
+              console.warn("Gagal eksekusi sweeper tabungan:", errTab);
             }
           }
 
           // Reset rollover akumulasi karena sisa sudah dialirkan ke tabungan
           config.rolloverAccumulated = 0;
         } else {
-          // OPSI B: ROLLOVER KE BESOK
+          // Opsi Akumulasi ke Jatah Besok (Rollover)
           config.rolloverAccumulated = (config.rolloverAccumulated || 0) + sisa;
-          showToast("✨ Sisa budget (" + formatRp(sisa) + ") dari " + formatDt(lastDate) + " di-rollover menambah jatah hari ini!", "info", 8000);
+          showToast("✨ Sisa budget kemarin (" + formatRp(sisa) + ") diakumulasikan menambah jatah hari ini!", "info", 8000);
         }
       } else {
-        // Jika kemarin overbudget atau habis pas, reset rollover
+        // Jika kemarin overbudget atau pas habis, reset rollover
         config.rolloverAccumulated = 0;
       }
 
-      config.lastEvaluatedDate = todayStr;
+      // 4. Update penanda last_check_date agar fungsi ini hanya berjalan tepat satu kali per hari
+      config.last_check_date = todayStr;
       saveDailyBudgetConfig(config);
     }
 
+    // TAMPILAN REAL-TIME KUOTA BUDGET HARIAN (DASHBOARD & TAB BUDGET)
     function renderDailyBudget() {
       var config = getDailyBudgetConfig();
       var todayStr = getTodayDateString();
@@ -1602,43 +1725,115 @@
       var pct = totalAllowance > 0 ? (spentToday / totalAllowance) * 100 : 0;
       var clampedPct = Math.min(Math.max(pct, 0), 100);
 
-      // Label tanggal hari ini
-      var dateEl = document.getElementById('daily-current-date-label');
-      if (dateEl) {
-        dateEl.innerText = 'Hari ini, ' + formatDt(todayStr);
+      // --- 1. UPDATE KARTU DI DASHBOARD (REAL-TIME) ---
+      var dashRemainingEl = document.getElementById('dash-daily-remaining-val');
+      var dashLimitEl = document.getElementById('dash-daily-limit-val');
+      var dashSpentEl = document.getElementById('dash-daily-spent-val');
+      var dashCountEl = document.getElementById('dash-daily-count-val');
+      var dashStatusBadge = document.getElementById('dash-daily-status-badge');
+      var dashRuleBadge = document.getElementById('dash-daily-rule-badge');
+      var dashBarFill = document.getElementById('dash-daily-bar-fill');
+      var dashBarPct = document.getElementById('dash-daily-bar-pct');
+      var dashBarLabel = document.getElementById('dash-daily-bar-label');
+
+      if (dashRemainingEl) {
+        if (remaining < 0) {
+          dashRemainingEl.innerText = '-' + formatRp(Math.abs(remaining));
+          dashRemainingEl.className = 'text-2xl sm:text-3xl font-black text-rose-400 tracking-tight';
+        } else {
+          dashRemainingEl.innerText = formatRp(remaining);
+          dashRemainingEl.className = 'text-2xl sm:text-3xl font-black text-emerald-300 tracking-tight';
+        }
       }
 
-      // Badge aturan header
+      if (dashLimitEl) {
+        if (rollover > 0) {
+          dashLimitEl.innerHTML = formatRp(baseLimit) + ' <span class="text-emerald-300 font-semibold">(+' + formatRp(rollover) + ' rollover)</span>';
+        } else {
+          dashLimitEl.innerText = formatRp(baseLimit);
+        }
+      }
+
+      if (dashSpentEl) dashSpentEl.innerText = formatRp(spentToday);
+      if (dashCountEl) dashCountEl.innerText = countToday + ' transaksi Harian';
+
+      if (dashStatusBadge) {
+        if (remaining < 0) {
+          dashStatusBadge.innerText = 'Overbudget';
+          dashStatusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-900/80 text-rose-300 border border-rose-500/40';
+        } else if (pct >= 80) {
+          dashStatusBadge.innerText = 'Mendekati Limit';
+          dashStatusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-900/80 text-amber-300 border border-amber-500/40';
+        } else {
+          dashStatusBadge.innerText = 'Aman';
+          dashStatusBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-900/80 text-emerald-300 border border-emerald-500/30';
+        }
+      }
+
+      if (dashRuleBadge) {
+        if (config.rule === 'tabungan') {
+          dashRuleBadge.innerText = 'Otomatis Tabungan: ' + (config.targetTabunganTujuan || 'Tabungan Impian');
+          dashRuleBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        } else {
+          dashRuleBadge.innerText = 'Akumulasi ke Besok' + (rollover > 0 ? ' (Aktif)' : '');
+          dashRuleBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-200 border border-teal-500/30';
+        }
+      }
+
+      if (dashBarFill) {
+        dashBarFill.style.width = clampedPct + '%';
+        if (pct >= 100) {
+          dashBarFill.className = 'h-full rounded-full bg-gradient-to-r from-rose-500 to-red-600 transition-all duration-500';
+        } else if (pct >= 80) {
+          dashBarFill.className = 'h-full rounded-full bg-gradient-to-r from-amber-400 to-rose-500 transition-all duration-500';
+        } else {
+          dashBarFill.className = 'h-full rounded-full bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 transition-all duration-500';
+        }
+      }
+
+      if (dashBarPct) dashBarPct.innerText = pct.toFixed(1) + '% Terpakai';
+
+      if (dashBarLabel) {
+        if (pct > 100) {
+          dashBarLabel.innerHTML = '<i class="fas fa-exclamation-triangle text-rose-400"></i> <span class="text-rose-300">Melebihi Kuota Harian</span>';
+        } else if (pct >= 80) {
+          dashBarLabel.innerHTML = '<i class="fas fa-exclamation-circle text-amber-400"></i> <span class="text-amber-300">Mendekati Batas Limit</span>';
+        } else {
+          dashBarLabel.innerHTML = '<i class="fas fa-smile text-emerald-400"></i> <span class="text-emerald-300">Kuota Terkendali</span>';
+        }
+      }
+
+      // --- 2. UPDATE KARTU DI TAB TARGET (BUDGET) ---
+      var dateEl = document.getElementById('daily-current-date-label');
+      if (dateEl) dateEl.innerText = 'Hari ini, ' + formatDt(todayStr);
+
       var ruleBadge = document.getElementById('daily-rule-badge-header');
       if (ruleBadge) {
         if (config.rule === 'tabungan') {
-          ruleBadge.innerText = 'Alirkan ke: ' + (config.targetTabunganTujuan || 'Tabungan');
+          ruleBadge.innerText = 'Otomatis Tabungan: ' + (config.targetTabunganTujuan || 'Tabungan Impian');
           ruleBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 shadow-xs';
         } else {
-          ruleBadge.innerText = 'Rollover ke Besok' + (rollover > 0 ? ' (Aktif)' : '');
+          ruleBadge.innerText = 'Akumulasi ke Besok' + (rollover > 0 ? ' (Aktif)' : '');
           ruleBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/25 text-teal-200 border border-teal-500/40 shadow-xs';
         }
       }
 
-      // Metrik 1: Jatah Hari Ini
       var allowEl = document.getElementById('daily-allowance-val');
       var allowSub = document.getElementById('daily-breakdown-sub');
       if (allowEl) allowEl.innerText = formatRp(totalAllowance);
       if (allowSub) {
         if (rollover > 0) {
-          allowSub.innerHTML = '<span>Dasar: <b>' + formatRp(baseLimit) + '</b></span> • <span class="text-emerald-300">Rollover: <b>+' + formatRp(rollover) + '</b></span>';
+          allowSub.innerHTML = '<span>Limit: <b>' + formatRp(baseLimit) + '</b></span> • <span class="text-emerald-300">Akumulasi: <b>+' + formatRp(rollover) + '</b></span>';
         } else {
-          allowSub.innerHTML = '<span>Plafon dasar: <b>' + formatRp(baseLimit) + '</b></span>';
+          allowSub.innerHTML = '<span>Limit dasar: <b>' + formatRp(baseLimit) + '</b></span>';
         }
       }
 
-      // Metrik 2: Terpakai Hari Ini
       var spentEl = document.getElementById('daily-spent-val');
       var countEl = document.getElementById('daily-spent-trans-count');
       if (spentEl) spentEl.innerText = formatRp(spentToday);
       if (countEl) countEl.innerText = countToday + ' transaksi';
 
-      // Metrik 3: Sisa Hari Ini
       var remCard = document.getElementById('daily-remaining-card');
       var remEl = document.getElementById('daily-remaining-val');
       var remSub = document.getElementById('daily-remaining-sub');
@@ -1678,13 +1873,12 @@
         }
       }
 
-      // Progress Bar Interaktif
       var barLabel = document.getElementById('daily-bar-label');
       var barPct = document.getElementById('daily-bar-pct');
       var barFill = document.getElementById('daily-bar-fill');
       var barMax = document.getElementById('daily-bar-max');
 
-      if (barMax) barMax.innerText = 'Jatah: ' + formatRp(totalAllowance);
+      if (barMax) barMax.innerText = 'Limit: ' + formatRp(totalAllowance);
       if (barPct) barPct.innerText = pct.toFixed(1) + '% Terpakai';
 
       if (barFill) {
@@ -1700,27 +1894,26 @@
 
       if (barLabel) {
         if (pct > 100) {
-          barLabel.innerHTML = '<i class="fas fa-exclamation-triangle text-rose-400"></i> <span class="text-rose-300">Melebihi Jatah Harian</span>';
+          barLabel.innerHTML = '<i class="fas fa-exclamation-triangle text-rose-400"></i> <span class="text-rose-300">Melebihi Limit Harian</span>';
         } else if (pct >= 80) {
-          barLabel.innerHTML = '<i class="fas fa-exclamation-circle text-amber-400"></i> <span class="text-amber-300">Mendekati Batas Plafon</span>';
+          barLabel.innerHTML = '<i class="fas fa-exclamation-circle text-amber-400"></i> <span class="text-amber-300">Mendekati Batas Limit</span>';
         } else {
           barLabel.innerHTML = '<i class="fas fa-smile text-emerald-400"></i> <span class="text-emerald-300">Pengeluaran Terkendali</span>';
         }
       }
 
-      // Pastikan input di form terisi
       var inputLimit = document.getElementById('input-daily-limit');
       if (inputLimit && !inputLimit.value) {
         inputLimit.value = baseLimit;
       }
     }
 
-    function toggleDailyBudgetSettings() {
+    function toggleDailyBudgetSettings(forceOpen) {
       var panel = document.getElementById('daily-settings-panel');
       var textBtn = document.getElementById('text-toggle-daily-settings');
       if (!panel) return;
       var isHidden = panel.classList.contains('hidden');
-      if (isHidden) {
+      if (forceOpen === true || isHidden) {
         panel.classList.remove('hidden');
         if (textBtn) textBtn.innerText = 'Tutup';
         var config = getDailyBudgetConfig();
@@ -1792,7 +1985,7 @@
       var inputLimit = document.getElementById('input-daily-limit');
       var limitVal = parseFloat(inputLimit ? inputLimit.value : 0) || 0;
       if (limitVal <= 0) {
-        showToast("Harap masukkan plafon harian yang valid (> Rp 0)!", "warning");
+        showToast("Harap masukkan limit harian yang valid (> Rp 0)!", "warning");
         return;
       }
 
@@ -1818,13 +2011,14 @@
       config.rule = rule;
       config.targetTabunganId = targetId;
       config.targetTabunganTujuan = targetName;
+      if (!config.last_check_date) config.last_check_date = getTodayDateString();
       saveDailyBudgetConfig(config);
 
       if (navigator.vibrate) {
         try { navigator.vibrate(30); } catch(e){}
       }
 
-      showToast("Pengaturan Budget Harian Fleksibel berhasil disimpan!", "success");
+      showToast("Pengaturan Budget Harian berhasil disimpan!", "success");
       toggleDailyBudgetSettings();
       renderDailyBudget();
     }
@@ -1834,7 +2028,7 @@
       var config = getDailyBudgetConfig();
       config.rolloverAccumulated = 0;
       saveDailyBudgetConfig(config);
-      showToast("Akumulasi rollover di-reset. Jatah kembali ke plafon murni.", "info");
+      showToast("Akumulasi rollover di-reset. Jatah kembali ke limit normal.", "info");
       renderDailyBudget();
     }
 
@@ -1901,16 +2095,16 @@
             body: JSON.stringify({ terkumpul: newTerkumpul })
           });
 
-          // Catat transaksi dengan kategori Harian agar sisa hari ini terserap
+          // Catat transaksi dengan tipe 'Pemasukan/Tabungan' dan catatan 'Sisa Budget Harian Kemarin'
           var transPayload = [{
             tanggal: todayStr,
-            deskripsi: "Transfer Sisa Budget Harian ke: " + finalName,
-            tipe: "Pengeluaran",
+            deskripsi: "Sisa Budget Harian dialirkan ke: " + finalName,
+            tipe: "Pemasukan/Tabungan",
             dompet: "Pribadi",
             nominal: sisa,
             metode: "Transfer Bank",
-            kategori: "Harian",
-            catatan: "#SmartBudget #AlirkanTabunganManual"
+            kategori: "Tabungan",
+            catatan: "Sisa Budget Harian Kemarin"
           }];
 
           await fetch(SUPABASE_URL + "/rest/v1/transaksi", {
@@ -1934,40 +2128,14 @@
           showToast("Gagal mengalirkan sisa budget: " + e.message, "error");
         }
       } else {
-        if (!confirm("Tambahkan sisa hari ini sebesar " + formatRp(sisa) + " ke akumulasi rollover sekarang?")) {
+        if (!confirm("Tambahkan sisa hari ini sebesar " + formatRp(sisa) + " ke akumulasi jatah besok sekarang?")) {
           return;
         }
-        var transPayload2 = [{
-          tanggal: todayStr,
-          deskripsi: "Rollover Sisa Budget Harian ke Besok",
-          tipe: "Pengeluaran",
-          dompet: "Pribadi",
-          nominal: sisa,
-          metode: "Tunai",
-          kategori: "Harian",
-          catatan: "#SmartBudget #RolloverManual"
-        }];
+        config.rolloverAccumulated = (config.rolloverAccumulated || 0) + sisa;
+        saveDailyBudgetConfig(config);
 
-        try {
-          await fetch(SUPABASE_URL + "/rest/v1/transaksi", {
-            method: "POST",
-            headers: {
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-              "Content-Type": "application/json",
-              "Prefer": "return=representation"
-            },
-            body: JSON.stringify(transPayload2)
-          });
-
-          config.rolloverAccumulated = (config.rolloverAccumulated || 0) + sisa;
-          saveDailyBudgetConfig(config);
-
-          showToast("✨ Sisa " + formatRp(sisa) + " berhasil di-rollover!", "info");
-          loadTransaksi();
-        } catch (e2) {
-          showToast("Gagal rollover manual: " + e2.message, "error");
-        }
+        showToast("✨ Sisa " + formatRp(sisa) + " berhasil diakumulasikan ke jatah besok!", "info");
+        renderDailyBudget();
       }
     }
 

@@ -182,12 +182,27 @@
         <div id="view-target" class="view-section hidden space-y-4">
           <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 space-y-4">
             <h3 class="text-sm font-bold text-gray-900 flex items-center gap-1.5"><i class="fas fa-bullseye text-teal-600"></i> Target & Limit Budget Bulanan</h3>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-gray-200/80 grid grid-cols-1 sm:grid-cols-4 gap-2.5 text-xs">
-              <input type="text" id="input-kategori" placeholder="Nama Kategori (mis. Makan)" class="border p-2.5 rounded-xl bg-white">
-              <input type="number" id="input-limit" placeholder="Limit Bulanan (Rp)" class="border p-2.5 rounded-xl bg-white">
-              <input type="number" id="input-threshold" value="80" min="1" max="100" placeholder="Peringatan % (def. 80)" class="border p-2.5 rounded-xl bg-white">
-              <div class="flex gap-1.5"><button onclick="batalEditBudget()" id="btn-batal-budget" class="hidden px-2.5 py-1.5 text-gray-500 text-xs">Batal</button><button onclick="simpanBudget()" id="btn-simpan" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold flex-1"><i class="fas fa-save mr-1"></i><span id="btn-simpan-text">Simpan</span></button></div>
-            </div>
+            <form id="form-budget" onsubmit="event.preventDefault(); simpanBudget();" class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 grid grid-cols-1 md:grid-cols-12 gap-3 text-xs items-start">
+              <div class="md:col-span-4">
+                <label for="input-kategori" class="block font-semibold mb-1 text-gray-700">Nama Kategori</label>
+                <input type="text" id="input-kategori" required placeholder="Contoh: Harian / Makanan" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div class="md:col-span-3">
+                <label for="input-limit" class="block font-semibold mb-1 text-gray-700">Batas Nominal (Rp)</label>
+                <input type="number" id="input-limit" required min="1" placeholder="Contoh: 50000" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white font-bold focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div class="md:col-span-3">
+                <label for="input-threshold" class="block font-semibold mb-1 text-gray-700">Peringatan Batas Pemakaian (%)</label>
+                <input type="number" id="input-threshold" value="80" min="1" max="100" placeholder="80" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+                <span class="text-[10px] text-gray-500 mt-1 block">Peringatan warna kuning saat pemakaian mencapai X%</span>
+              </div>
+              <div class="md:col-span-2 pt-0 md:pt-5 flex gap-1.5 items-center">
+                <button type="button" onclick="batalEditBudget()" id="btn-batal-budget" class="hidden px-2.5 py-2.5 text-gray-500 hover:text-gray-700 text-xs font-semibold">Batal</button>
+                <button type="submit" id="btn-simpan" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-bold flex-1 flex items-center justify-center gap-1 shadow-xs active:scale-95 transition">
+                  <i class="fas fa-save mr-1"></i><span id="btn-simpan-text">Simpan</span>
+                </button>
+              </div>
+            </form>
             <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left text-xs whitespace-nowrap"><thead class="bg-slate-50 text-gray-500 uppercase font-semibold"><tr><th class="p-3">Kategori</th><th class="p-3">Pemakaian Bulan Ini</th><th class="p-3 text-right">Limit</th><th class="p-3 text-center">Threshold</th><th class="p-3 text-center">Aksi</th></tr></thead><tbody id="tbody-budget" class="divide-y divide-gray-100"></tbody></table></div>
           </div>
         </div>
@@ -200,14 +215,61 @@
           </div>
           <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 space-y-4">
             <h3 class="text-sm font-bold text-gray-900 flex items-center gap-1.5"><i class="fas fa-hand-holding-usd text-teal-600"></i> Catatan Hutang & Piutang</h3>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-gray-200/80 grid grid-cols-1 sm:grid-cols-5 gap-2.5 text-xs">
-              <input type="date" id="input-hp-tanggal" class="border p-2.5 rounded-xl bg-white">
-              <input type="text" id="input-hp-nama" placeholder="Nama Pihak" class="border p-2.5 rounded-xl bg-white">
-              <select id="input-hp-tipe" class="border p-2.5 rounded-xl bg-white"><option value="Hutang">Hutang</option><option value="Piutang">Piutang</option></select>
-              <input type="number" id="input-hp-nominal" placeholder="Nominal (Rp)" class="border p-2.5 rounded-xl bg-white">
-              <div class="flex gap-2"><input type="text" id="input-hp-keterangan" placeholder="Keterangan" class="border p-2.5 rounded-xl bg-white flex-1"><button onclick="simpanHutangPiutang()" id="btn-simpan-hp" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold"><i class="fas fa-save"></i></button></div>
+            <form id="form-hutang-piutang" onsubmit="event.preventDefault(); simpanHutangPiutang();" class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs items-start">
+              <div>
+                <label for="input-hp-tipe" class="block font-semibold mb-1 text-gray-700">Tipe Transaksi</label>
+                <select id="input-hp-tipe" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white font-medium focus:ring-2 focus:ring-teal-500 outline-none">
+                  <option value="Hutang">Hutang (Kewajiban)</option>
+                  <option value="Piutang">Piutang (Hak Tagih)</option>
+                </select>
+              </div>
+              <div>
+                <label for="input-hp-nama" class="block font-semibold mb-1 text-gray-700">Nama Pihak</label>
+                <input type="text" id="input-hp-nama" required placeholder="Contoh: Budi Santoso / PT ABC" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div>
+                <label for="input-hp-nominal" class="block font-semibold mb-1 text-gray-700">Nominal (Rp)</label>
+                <input type="number" id="input-hp-nominal" required min="1" placeholder="Contoh: 150000" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white font-bold focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div>
+                <label for="input-hp-tanggal" class="block font-semibold mb-1 text-gray-700">Tanggal Tempo</label>
+                <input type="date" id="input-hp-tanggal" required class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div>
+                <label for="input-hp-status" class="block font-semibold mb-1 text-gray-700">Status Lunas</label>
+                <select id="input-hp-status" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white font-medium focus:ring-2 focus:ring-teal-500 outline-none">
+                  <option value="Belum Lunas">Belum Lunas</option>
+                  <option value="Lunas">Lunas</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2 lg:col-span-5 grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
+                <div class="sm:col-span-9">
+                  <label for="input-hp-keterangan" class="block font-semibold mb-1 text-gray-700">Keterangan / Catatan</label>
+                  <input type="text" id="input-hp-keterangan" placeholder="Contoh: Pinjaman modal belanja perlengkapan / tempo 30 hari" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+                </div>
+                <div class="sm:col-span-3 flex items-end">
+                  <button type="submit" id="btn-simpan-hp" class="w-full bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition">
+                    <i class="fas fa-save"></i><span>Simpan Catatan</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="overflow-x-auto rounded-xl border border-gray-100">
+              <table class="w-full text-left text-xs whitespace-nowrap">
+                <thead class="bg-slate-50 text-gray-500 uppercase font-semibold">
+                  <tr>
+                    <th class="p-3">Tanggal Tempo</th>
+                    <th class="p-3">Nama Pihak</th>
+                    <th class="p-3 text-center">Tipe</th>
+                    <th class="p-3 text-right">Nominal</th>
+                    <th class="p-3 text-center">Status</th>
+                    <th class="p-3">Keterangan</th>
+                    <th class="p-3 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-hutang" class="divide-y divide-gray-100"></tbody>
+              </table>
             </div>
-            <div class="overflow-x-auto rounded-xl border border-gray-100"><table class="w-full text-left text-xs whitespace-nowrap"><thead class="bg-slate-50 text-gray-500 uppercase font-semibold"><tr><th class="p-3">Tanggal</th><th class="p-3">Nama</th><th class="p-3 text-center">Tipe</th><th class="p-3 text-right">Nominal</th><th class="p-3 text-center">Status</th><th class="p-3">Keterangan</th><th class="p-3 text-center">Aksi</th></tr></thead><tbody id="tbody-hutang" class="divide-y divide-gray-100"></tbody></table></div>
           </div>
         </div>
 
@@ -215,12 +277,25 @@
         <div id="view-tabungan" class="view-section hidden space-y-4">
           <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100 space-y-4">
             <h3 class="text-sm font-bold text-gray-900 flex items-center gap-1.5"><i class="fas fa-piggy-bank text-teal-600"></i> Target Tabungan Impian</h3>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-gray-200/80 grid grid-cols-1 sm:grid-cols-4 gap-2.5 text-xs">
-              <input type="text" id="input-tabungan-tujuan" placeholder="Tujuan Impian (mis. Beli Laptop)" class="border p-2.5 rounded-xl bg-white">
-              <input type="number" id="input-tabungan-target" placeholder="Target Nominal (Rp)" class="border p-2.5 rounded-xl bg-white">
-              <input type="number" id="input-tabungan-awal" placeholder="Saldo Awal (Rp)" class="border p-2.5 rounded-xl bg-white">
-              <button onclick="simpanTargetTabungan()" id="btn-simpan-tabungan" class="bg-teal-600 hover:bg-teal-700 text-white p-2.5 rounded-xl font-bold flex items-center justify-center gap-1"><i class="fas fa-plus"></i><span>Buat Target</span></button>
-            </div>
+            <form id="form-tabungan" onsubmit="event.preventDefault(); simpanTargetTabungan();" class="bg-slate-50 p-4 rounded-2xl border border-gray-200/80 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs items-start">
+              <div class="sm:col-span-5">
+                <label for="input-tabungan-tujuan" class="block font-semibold mb-1 text-gray-700">Nama Target Impian</label>
+                <input type="text" id="input-tabungan-tujuan" required placeholder="Contoh: Beli Laptop Baru / Dana Darurat" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="input-tabungan-target" class="block font-semibold mb-1 text-gray-700">Target Nominal (Rp)</label>
+                <input type="number" id="input-tabungan-target" required min="1" placeholder="Contoh: 15000000" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white font-bold focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="input-tabungan-awal" class="block font-semibold mb-1 text-gray-700">Terkumpul Saat Ini (Rp)</label>
+                <input type="number" id="input-tabungan-awal" min="0" placeholder="0" value="0" class="w-full border border-gray-300 p-2.5 rounded-xl bg-white focus:ring-2 focus:ring-teal-500 outline-none">
+              </div>
+              <div class="sm:col-span-2 pt-0 sm:pt-5 flex items-end">
+                <button type="submit" id="btn-simpan-tabungan" class="w-full bg-teal-600 hover:bg-teal-700 text-white px-3 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition">
+                  <i class="fas fa-plus"></i><span>Buat Target</span>
+                </button>
+              </div>
+            </form>
             <div id="container-tabungan" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
           </div>
         </div>
@@ -499,13 +574,61 @@
     window.supabase = supabase;
 
     // ----------------- TOAST, HAPTIC & FORMATTING -----------------
-    function showToast(msg, type) {
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatSupabaseError(errData, status, statusText) {
+      if (!errData) {
+        return (status ? "Status " + status + ": " : "") + (statusText || "Terjadi kesalahan pada respon server");
+      }
+      if (typeof errData === 'string') return errData;
+      var parts = [];
+      if (errData.message) parts.push(errData.message);
+      if (errData.details) parts.push("Detail: " + errData.details);
+      if (errData.hint) parts.push("Petunjuk: " + errData.hint);
+      if (errData.code) parts.push("Kode: " + errData.code);
+      if (parts.length > 0) return parts.join(" | ");
+      try {
+        return JSON.stringify(errData);
+      } catch (e) {
+        return String(errData);
+      }
+    }
+
+    function showToast(msg, type, customDuration) {
+      var container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm sm:max-w-md w-full px-4 sm:px-0 pointer-events-none';
+        document.body.appendChild(container);
+      }
       var t = document.createElement('div');
-      var color = (type === 'error') ? 'bg-rose-600' : (type === 'warning' ? 'bg-amber-500' : (type === 'info' ? 'bg-sky-600' : 'bg-teal-700'));
-      t.className = 'fixed bottom-5 right-5 z-50 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg transition-opacity duration-300 ' + color;
-      t.innerText = msg;
-      document.body.appendChild(t);
-      setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 300); }, 3000);
+      var isErr = type === 'error';
+      var isWarn = type === 'warning';
+      var isInfo = type === 'info';
+      var color = isErr ? 'bg-rose-600 text-white shadow-rose-900/40' : (isWarn ? 'bg-amber-500 text-slate-900 shadow-amber-900/30' : (isInfo ? 'bg-sky-600 text-white shadow-sky-900/30' : 'bg-teal-700 text-white shadow-teal-900/30'));
+      var icon = isErr ? 'fa-exclamation-triangle' : (isWarn ? 'fa-exclamation-circle' : (isInfo ? 'fa-info-circle' : 'fa-check-circle'));
+      
+      t.className = 'pointer-events-auto flex items-start gap-3 p-3.5 rounded-2xl shadow-xl transition-all duration-300 text-xs font-medium border border-white/20 ' + color;
+      t.innerHTML = '<i class="fas ' + icon + ' mt-0.5 text-sm flex-shrink-0"></i>' +
+                    '<div class="flex-1 break-words leading-relaxed">' + escapeHtml(msg) + '</div>' +
+                    '<button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white p-0.5 transition flex-shrink-0" aria-label="Tutup"><i class="fas fa-times text-xs"></i></button>';
+      
+      container.appendChild(t);
+      var duration = customDuration || (isErr ? 8000 : 3500);
+      setTimeout(function() {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(10px)';
+        setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+      }, duration);
     }
 
     function formatRp(n) {
@@ -591,6 +714,10 @@
       var titles = { 'dashboard': 'Ringkasan Keuangan', 'transaksi': 'Riwayat Transaksi', 'target': 'Target & Budget Bulanan', 'hutang': 'Hutang & Piutang', 'tabungan': 'Target Tabungan Impian' };
       var tEl = document.getElementById('page-title');
       if (tEl) tEl.innerText = titles[name] || 'WealthLab Dashboard';
+      if (name === 'hutang') {
+        var hpTgl = document.getElementById('input-hp-tanggal');
+        if (hpTgl && !hpTgl.value) hpTgl.value = new Date().toISOString().split('T')[0];
+      }
       if (window.innerWidth < 768) { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
     }
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('overlay').classList.toggle('hidden'); }
@@ -601,6 +728,9 @@
       var refIcon = document.getElementById('btn-refresh-icon');
       if (refIcon) refIcon.classList.add('fa-spin');
       if (l && (!allTransactions || !allTransactions.length)) l.classList.remove('hidden');
+
+      var hpTgl = document.getElementById('input-hp-tanggal');
+      if (hpTgl && !hpTgl.value) hpTgl.value = new Date().toISOString().split('T')[0];
       
       try {
         await Promise.all([loadTransaksi(), loadBudget(), loadHutangPiutang(), loadTabungan()]);
@@ -1128,19 +1258,77 @@
     }
     function editBudget(kat, lim, th, id) { editingBudgetId = id; document.getElementById('input-kategori').value = kat; document.getElementById('input-limit').value = lim; document.getElementById('input-threshold').value = th; document.getElementById('btn-simpan-text').innerText = "Update"; document.getElementById('btn-batal-budget').classList.remove('hidden'); }
     function batalEditBudget() { editingBudgetId = null; document.getElementById('input-kategori').value = ''; document.getElementById('input-limit').value = ''; document.getElementById('btn-simpan-text').innerText = "Simpan"; document.getElementById('btn-batal-budget').classList.add('hidden'); }
-    async function simpanBudget() {
-      var k = document.getElementById('input-kategori').value.trim(), l = Number(document.getElementById('input-limit').value) || 0, th = Number(document.getElementById('input-threshold').value) || 80;
-      if (!k || l <= 0) return showToast("Isi kategori dan limit!", "warning");
-      if (editingBudgetId) await supabase.from('budget').update({ kategori: k, limit_nominal: l, threshold: th }).eq('id', editingBudgetId);
-      else await supabase.from('budget').insert([{ kategori: k, limit_nominal: l, threshold: th }]);
-      if (navigator.vibrate) navigator.vibrate(30);
-      showToast("Budget tersimpan!"); batalEditBudget(); loadBudget();
+    async function simpanBudget(e) {
+      if (e) e.preventDefault();
+      var k = document.getElementById('input-kategori').value.trim();
+      var l = Number(document.getElementById('input-limit').value) || 0;
+      var th = Number(document.getElementById('input-threshold').value) || 80;
+      if (!k || l <= 0) return showToast("Harap isi nama kategori dan batas nominal yang valid!", "warning");
+      
+      var btn = document.getElementById('btn-simpan');
+      if (btn) btn.disabled = true;
+
+      try {
+        if (editingBudgetId) {
+          var url = SUPABASE_URL + "/rest/v1/budget?id=eq." + encodeURIComponent(editingBudgetId);
+          var res = await fetch(url, {
+            method: "PATCH",
+            headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+            body: JSON.stringify({ kategori: k, limit_nominal: l, threshold: th })
+          });
+          if (res.status === 200 || res.status === 204) {
+            if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+            showToast("Budget kategori \"" + k + "\" berhasil diperbarui!", "success");
+            batalEditBudget();
+            loadBudget();
+          } else {
+            var errData = await res.json().catch(function() { return null; });
+            showToast("Gagal update budget: " + formatSupabaseError(errData, res.status, res.statusText), "error");
+          }
+        } else {
+          var res = await fetch(SUPABASE_URL + "/rest/v1/budget", {
+            method: "POST",
+            headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+            body: JSON.stringify([{ kategori: k, limit_nominal: l, threshold: th }])
+          });
+          if (res.status === 200 || res.status === 201) {
+            if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+            showToast("Budget kategori \"" + k + "\" berhasil disimpan!", "success");
+            batalEditBudget();
+            loadBudget();
+          } else {
+            var errData = await res.json().catch(function() { return null; });
+            showToast("Gagal simpan budget: " + formatSupabaseError(errData, res.status, res.statusText), "error");
+          }
+        }
+      } catch (err) {
+        showToast("Kendala koneksi ke server: " + err.message, "error");
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
+
     async function hapusBudget(k, id) {
       if (!confirm("Hapus limit kategori \"" + k + "\"?")) return;
-      var q = supabase.from('budget').delete();
-      if (id && id !== 'null') q = q.eq('id', id); else q = q.ilike('kategori', k);
-      await q; showToast("Budget dihapus!"); loadBudget();
+      var url = SUPABASE_URL + "/rest/v1/budget";
+      if (id && id !== 'null') url += "?id=eq." + encodeURIComponent(id);
+      else url += "?kategori=ilike." + encodeURIComponent(k);
+
+      try {
+        var res = await fetch(url, {
+          method: "DELETE",
+          headers: supabaseHeaders
+        });
+        if (res.status === 200 || res.status === 204) {
+          showToast("Budget \"" + k + "\" dihapus!", "info");
+          loadBudget();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          showToast("Gagal hapus budget: " + formatSupabaseError(errData, res.status, res.statusText), "error");
+        }
+      } catch (err) {
+        showToast("Kendala koneksi: " + err.message, "error");
+      }
     }
 
     // ----------------- MODUL HUTANG & PIUTANG -----------------
@@ -1160,32 +1348,123 @@
         if (!isL) { if (isH) tH += nom; else tP += nom; }
         var idArg = r.id ? "'" + r.id + "'" : 'null', nArg = (r.nama || '').replace(/'/g, "\\'");
         var bLunas = !isL ? '<button onclick="tandaiLunasHutang(' + idArg + ', \'' + nArg + '\')" class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded border border-emerald-200 text-[10px] font-semibold active:scale-95"><i class="fas fa-check mr-0.5"></i>Lunas</button>' : '<span class="text-emerald-600 font-bold">Lunas</span>';
-        tb.innerHTML += '<tr class="hover:bg-slate-50"><td class="p-3 text-gray-500">' + formatDt(r.tanggal) + '</td><td class="p-3 font-semibold">' + r.nama + '</td><td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-semibold ' + (isH ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700') + '">' + r.tipe + '</span></td><td class="p-3 text-right font-bold ' + (isH ? 'text-rose-600' : 'text-emerald-600') + '">' + formatRp(nom) + '</td><td class="p-3 text-center">' + (isL ? '<span class="text-emerald-600 font-semibold">Lunas</span>' : '<span class="text-amber-600 font-semibold">Belum Lunas</span>') + '</td><td class="p-3 text-gray-600">' + (r.keterangan || '-') + '</td><td class="p-3 text-center"><div class="flex justify-center items-center gap-1.5">' + bLunas + '<button onclick="hapusHutang(' + idArg + ', \'' + nArg + '\')" class="text-rose-500 p-1"><i class="fas fa-trash-alt"></i></button></div></td></tr>';
+        tb.innerHTML += '<tr class="hover:bg-slate-50"><td class="p-3 text-gray-500">' + formatDt(r.tanggal) + '</td><td class="p-3 font-semibold">' + escapeHtml(r.nama) + '</td><td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-semibold ' + (isH ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700') + '">' + escapeHtml(r.tipe) + '</span></td><td class="p-3 text-right font-bold ' + (isH ? 'text-rose-600' : 'text-emerald-600') + '">' + formatRp(nom) + '</td><td class="p-3 text-center">' + (isL ? '<span class="text-emerald-600 font-semibold">Lunas</span>' : '<span class="text-amber-600 font-semibold">Belum Lunas</span>') + '</td><td class="p-3 text-gray-600">' + escapeHtml(r.keterangan || '-') + '</td><td class="p-3 text-center"><div class="flex justify-center items-center gap-1.5">' + bLunas + '<button onclick="hapusHutang(' + idArg + ', \'' + nArg + '\')" class="text-rose-500 p-1"><i class="fas fa-trash-alt"></i></button></div></td></tr>';
       }
       document.getElementById('total-hutang').innerText = formatRp(tH);
       document.getElementById('total-piutang').innerText = formatRp(tP);
     }
-    async function simpanHutangPiutang() {
+
+    async function simpanHutangPiutang(e) {
+      if (e) e.preventDefault();
       var tgl = document.getElementById('input-hp-tanggal').value || new Date().toISOString().split('T')[0];
-      var nama = document.getElementById('input-hp-nama').value.trim(), tipe = document.getElementById('input-hp-tipe').value, nom = Number(document.getElementById('input-hp-nominal').value) || 0, ket = document.getElementById('input-hp-keterangan').value.trim() || '-';
-      if (!nama || nom <= 0) return showToast("Isi nama dan nominal!", "warning");
-      await supabase.from('hutang_piutang').insert([{ tanggal: tgl, nama: nama, tipe: tipe, nominal: nom, status: 'Belum Lunas', keterangan: ket }]);
-      if (navigator.vibrate) navigator.vibrate(30);
-      showToast("Catatan tersimpan!"); document.getElementById('input-hp-nama').value = ''; document.getElementById('input-hp-nominal').value = ''; loadHutangPiutang();
+      var nama = document.getElementById('input-hp-nama').value.trim();
+      var tipe = document.getElementById('input-hp-tipe').value;
+      var nom = Number(document.getElementById('input-hp-nominal').value) || 0;
+      var status = (document.getElementById('input-hp-status') ? document.getElementById('input-hp-status').value : 'Belum Lunas') || 'Belum Lunas';
+      var ket = document.getElementById('input-hp-keterangan').value.trim() || '-';
+      var btn = document.getElementById('btn-simpan-hp');
+
+      if (!nama || nom <= 0) {
+        return showToast("Harap isi nama pihak dan nominal yang valid!", "warning");
+      }
+
+      var payload = [{
+        tanggal: tgl,
+        nama: nama,
+        tipe: tipe,
+        nominal: nom,
+        status: status,
+        keterangan: ket
+      }];
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Menyimpan...';
+      }
+
+      try {
+        var res = await fetch(SUPABASE_URL + "/rest/v1/hutang_piutang", {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.status === 200 || res.status === 201) {
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+          showToast("Data " + tipe + " \"" + nama + "\" berhasil disimpan ke Supabase!", "success");
+          document.getElementById('input-hp-nama').value = '';
+          document.getElementById('input-hp-nominal').value = '';
+          document.getElementById('input-hp-keterangan').value = '';
+          if (document.getElementById('input-hp-status')) document.getElementById('input-hp-status').value = 'Belum Lunas';
+          loadHutangPiutang();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          var errMsg = formatSupabaseError(errData, res.status, res.statusText);
+          showToast("Gagal menyimpan hutang/piutang: " + errMsg, "error");
+          console.error("Supabase hutang_piutang POST Error:", errData);
+        }
+      } catch (err) {
+        showToast("Kendala koneksi ke server: " + err.message, "error");
+        console.error("Network error:", err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-save mr-1"></i>Simpan Catatan';
+        }
+      }
     }
+
     async function tandaiLunasHutang(id, nama) {
       if (!confirm("Tandai lunas catatan \"" + nama + "\"?")) return;
-      var q = supabase.from('hutang_piutang').update({ status: 'Lunas' });
-      if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('nama', nama);
-      await q; 
-      if (navigator.vibrate) navigator.vibrate(30);
-      showToast("Status lunas diperbarui!"); loadHutangPiutang();
+      var url = SUPABASE_URL + "/rest/v1/hutang_piutang";
+      if (id && id !== 'null') url += "?id=eq." + encodeURIComponent(id);
+      else url += "?nama=eq." + encodeURIComponent(nama);
+
+      try {
+        var res = await fetch(url, {
+          method: "PATCH",
+          headers: Object.assign({}, supabaseHeaders, { "Prefer": "return=representation" }),
+          body: JSON.stringify({ status: 'Lunas' })
+        });
+        if (res.status === 200 || res.status === 204) {
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+          showToast("Status lunas diperbarui!", "success");
+          loadHutangPiutang();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          showToast("Gagal update status: " + formatSupabaseError(errData, res.status, res.statusText), "error");
+        }
+      } catch (err) {
+        showToast("Kendala koneksi: " + err.message, "error");
+      }
     }
+
     async function hapusHutang(id, nama) {
       if (!confirm("Hapus catatan \"" + nama + "\"?")) return;
-      var q = supabase.from('hutang_piutang').delete();
-      if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('nama', nama);
-      await q; showToast("Catatan dihapus!"); loadHutangPiutang();
+      var url = SUPABASE_URL + "/rest/v1/hutang_piutang";
+      if (id && id !== 'null') url += "?id=eq." + encodeURIComponent(id);
+      else url += "?nama=eq." + encodeURIComponent(nama);
+
+      try {
+        var res = await fetch(url, {
+          method: "DELETE",
+          headers: supabaseHeaders
+        });
+        if (res.status === 200 || res.status === 204) {
+          showToast("Catatan dihapus!", "info");
+          loadHutangPiutang();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          showToast("Gagal hapus catatan: " + formatSupabaseError(errData, res.status, res.statusText), "error");
+        }
+      } catch (err) {
+        showToast("Kendala koneksi: " + err.message, "error");
+      }
     }
 
     // ----------------- MODUL TABUNGAN -----------------
@@ -1199,34 +1478,186 @@
       var cnt = document.getElementById('container-tabungan');
       if (!cnt) return;
       cnt.innerHTML = '';
-      if (!data || !data.length) { cnt.innerHTML = '<div class="col-span-full p-8 text-center text-gray-400 bg-white rounded-xl border">Belum ada target tabungan.</div>'; return; }
+      if (!data || !data.length) {
+        cnt.innerHTML = '<div class="col-span-full p-8 text-center text-gray-400 bg-white rounded-2xl border border-gray-100 shadow-xs"><i class="fas fa-piggy-bank text-3xl mb-2 text-teal-300"></i><p class="font-medium">Belum ada target tabungan impian.</p><p class="text-xs text-gray-400 mt-1">Buat target pertama Anda pada formulir di atas!</p></div>';
+        return;
+      }
       for (var i = 0; i < data.length; i++) {
-        var r = data[i], tg = parseFloat(r.target_nominal || 0) || 0, col = parseFloat(r.terkumpul || 0) || 0, pct = tg > 0 ? (col / tg) * 100 : 0, isDone = pct >= 100;
-        var idArg = r.id ? "'" + r.id + "'" : 'null', tArg = (r.tujuan || '').replace(/'/g, "\\'");
-        cnt.innerHTML += '<div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between space-y-3"><div><div class="flex justify-between items-start"><div><h4 class="font-bold text-gray-900 text-sm">' + r.tujuan + '</h4><span class="text-xs text-gray-400">Target: ' + formatRp(tg) + '</span></div><button onclick="hapusTargetTabungan(' + idArg + ', \'' + tArg + '\')" class="text-gray-400 hover:text-rose-500 p-1"><i class="fas fa-trash-alt text-xs"></i></button></div><div class="mt-2"><div class="flex justify-between text-xs font-bold mb-1"><span class="' + (isDone ? 'text-emerald-600' : 'text-teal-700') + '">' + formatRp(col) + '</span><span>' + pct.toFixed(1) + '%</span></div><div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div class="' + (isDone ? 'bg-emerald-500' : 'bg-teal-500') + ' h-2" style="width:' + Math.min(pct, 100) + '%"></div></div></div>' + (isDone ? '<span class="inline-block mt-2 text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded">🎉 Target Tercapai!</span>' : '') + '</div><div class="pt-2 border-t flex gap-1.5"><input type="number" id="input-setor-' + i + '" placeholder="Nominal Setoran" class="border p-2 rounded-xl text-xs w-full"><button onclick="setorTabungan(' + idArg + ', \'' + tArg + '\', \'input-setor-' + i + '\', ' + col + ')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold active:scale-95">Setor</button></div></div>';
+        var r = data[i];
+        var tg = parseFloat(r.target_nominal || 0) || 0;
+        var col = parseFloat(r.terkumpul || 0) || 0;
+        var pct = tg > 0 ? (col / tg) * 100 : 0;
+        var isDone = pct >= 100;
+        var idArg = r.id ? "'" + r.id + "'" : 'null';
+        var tArg = (r.tujuan || '').replace(/'/g, "\\'");
+        var colClass = isDone ? 'bg-emerald-500' : 'bg-teal-600';
+        
+        cnt.innerHTML += '<div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between space-y-4">' +
+          '<div>' +
+            '<div class="flex justify-between items-start gap-2">' +
+              '<div>' +
+                '<h4 class="font-bold text-gray-900 text-sm flex items-center gap-1.5"><i class="fas fa-bullseye text-teal-600 text-xs"></i>' + escapeHtml(r.tujuan) + '</h4>' +
+                '<span class="text-xs text-gray-500 mt-0.5 block">Target: <b class="text-gray-800">' + formatRp(tg) + '</b></span>' +
+              '</div>' +
+              '<button onclick="hapusTargetTabungan(' + idArg + ', \'' + tArg + '\')" class="text-gray-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-rose-50 transition" title="Hapus Target"><i class="fas fa-trash-alt text-xs"></i></button>' +
+            '</div>' +
+            '<div class="mt-3 bg-slate-50 p-2.5 rounded-xl border border-gray-100">' +
+              '<div class="flex justify-between text-xs font-bold mb-1.5">' +
+                '<span class="' + (isDone ? 'text-emerald-600' : 'text-teal-700') + '">' + formatRp(col) + '</span>' +
+                '<span class="' + (isDone ? 'text-emerald-600' : 'text-gray-600') + '">' + pct.toFixed(1) + '%</span>' +
+              '</div>' +
+              '<div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">' +
+                '<div class="' + colClass + ' h-2.5 rounded-full transition-all duration-500" style="width:' + Math.min(pct, 100) + '%"></div>' +
+              '</div>' +
+              (isDone ? '<div class="mt-2 text-center text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded-lg flex items-center justify-center gap-1"><i class="fas fa-check-circle"></i> Target Telah Tercapai!</div>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="pt-2 border-t border-gray-100 space-y-2">' +
+            '<div class="flex items-center gap-1.5 flex-wrap">' +
+              '<span class="text-[10px] text-gray-400 font-semibold uppercase">Setor Cepat:</span>' +
+              '<button type="button" onclick="tambahSetoranCepat(' + idArg + ', \'' + tArg + '\', 50000, ' + col + ')" class="text-[10px] bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 px-2.5 py-1 rounded-lg border border-gray-200 transition font-bold active:scale-95 shadow-2xs">+50rb</button>' +
+              '<button type="button" onclick="tambahSetoranCepat(' + idArg + ', \'' + tArg + '\', 100000, ' + col + ')" class="text-[10px] bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 px-2.5 py-1 rounded-lg border border-gray-200 transition font-bold active:scale-95 shadow-2xs">+100rb</button>' +
+              '<button type="button" onclick="tambahSetoranCepat(' + idArg + ', \'' + tArg + '\', 500000, ' + col + ')" class="text-[10px] bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 px-2.5 py-1 rounded-lg border border-gray-200 transition font-bold active:scale-95 shadow-2xs">+500rb</button>' +
+            '</div>' +
+            '<div class="flex gap-1.5">' +
+              '<input type="number" id="input-setor-' + i + '" min="1" placeholder="Nominal lain (Rp)" class="border border-gray-200 p-2 rounded-xl text-xs w-full focus:ring-1 focus:ring-teal-500 outline-none">' +
+              '<button onclick="setorTabungan(' + idArg + ', \'' + tArg + '\', \'input-setor-' + i + '\', ' + col + ')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold active:scale-95 shadow-xs flex items-center gap-1 transition"><i class="fas fa-hand-holding-usd"></i><span>Setor</span></button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
       }
     }
-    async function simpanTargetTabungan() {
-      var t = document.getElementById('input-tabungan-tujuan').value.trim(), tg = Number(document.getElementById('input-tabungan-target').value) || 0, aw = Number(document.getElementById('input-tabungan-awal').value) || 0;
-      if (!t || tg <= 0) return showToast("Isi nama tujuan & target nominal!", "warning");
-      await supabase.from('tabungan').insert([{ tujuan: t, target_nominal: tg, terkumpul: aw }]);
-      if (navigator.vibrate) navigator.vibrate(30);
-      showToast("Target tabungan dibuat!"); document.getElementById('input-tabungan-tujuan').value = ''; document.getElementById('input-tabungan-target').value = ''; document.getElementById('input-tabungan-awal').value = ''; loadTabungan();
+
+    async function simpanTargetTabungan(e) {
+      if (e) e.preventDefault();
+      var t = document.getElementById('input-tabungan-tujuan').value.trim();
+      var tg = Number(document.getElementById('input-tabungan-target').value) || 0;
+      var aw = Number(document.getElementById('input-tabungan-awal').value) || 0;
+      var btn = document.getElementById('btn-simpan-tabungan');
+
+      if (!t || tg <= 0) {
+        return showToast("Harap isi nama target tujuan dan target nominal yang valid!", "warning");
+      }
+
+      var payload = [{
+        tujuan: t,
+        target_nominal: tg,
+        terkumpul: aw
+      }];
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Menyimpan...';
+      }
+
+      try {
+        var res = await fetch(SUPABASE_URL + "/rest/v1/tabungan", {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.status === 200 || res.status === 201) {
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+          showToast("Target tabungan \"" + t + "\" berhasil dibuat di Supabase!", "success");
+          document.getElementById('input-tabungan-tujuan').value = '';
+          document.getElementById('input-tabungan-target').value = '';
+          document.getElementById('input-tabungan-awal').value = '0';
+          loadTabungan();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          var errMsg = formatSupabaseError(errData, res.status, res.statusText);
+          showToast("Gagal menyimpan target tabungan: " + errMsg, "error");
+          console.error("Supabase tabungan POST Error:", errData);
+        }
+      } catch (err) {
+        showToast("Kendala koneksi ke server: " + err.message, "error");
+        console.error("Network error:", err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-plus mr-1"></i><span>Buat Target</span>';
+        }
+      }
     }
+
+    async function tambahSetoranCepat(id, tujuan, tambahNominal, curr) {
+      var nominalBaru = curr + tambahNominal;
+      await eksekusiUpdateTabungan(id, tujuan, nominalBaru, tambahNominal);
+    }
+
     async function setorTabungan(id, t, inId, curr) {
-      var el = document.getElementById(inId), val = Number(el ? el.value : 0) || 0;
-      if (val <= 0) return showToast("Masukkan nominal setoran valid!", "warning");
-      var q = supabase.from('tabungan').update({ terkumpul: curr + val });
-      if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('tujuan', t);
-      await q; 
-      if (navigator.vibrate) navigator.vibrate(30);
-      showToast("Setoran berhasil!"); loadTabungan();
+      var el = document.getElementById(inId);
+      var val = Number(el ? el.value : 0) || 0;
+      if (val <= 0) return showToast("Masukkan nominal setoran valid (> 0)!", "warning");
+      var nominalBaru = curr + val;
+      await eksekusiUpdateTabungan(id, t, nominalBaru, val);
+      if (el) el.value = '';
     }
+
+    async function eksekusiUpdateTabungan(id, t, nominalBaru, nominalTambah) {
+      var url = SUPABASE_URL + "/rest/v1/tabungan";
+      if (id && id !== 'null') {
+        url += "?id=eq." + encodeURIComponent(id);
+      } else {
+        url += "?tujuan=eq." + encodeURIComponent(t);
+      }
+
+      try {
+        var res = await fetch(url, {
+          method: "PATCH",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+          },
+          body: JSON.stringify({ terkumpul: nominalBaru })
+        });
+
+        if (res.status === 200 || res.status === 204) {
+          if (navigator.vibrate) try { navigator.vibrate(30); } catch(e){}
+          showToast("Setoran +" + formatRp(nominalTambah) + " berhasil! Total: " + formatRp(nominalBaru), "success");
+          loadTabungan();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          var errMsg = formatSupabaseError(errData, res.status, res.statusText);
+          showToast("Gagal memperbarui setoran: " + errMsg, "error");
+          console.error("Supabase tabungan PATCH Error:", errData);
+        }
+      } catch (err) {
+        showToast("Kendala koneksi ke server: " + err.message, "error");
+        console.error("Network error:", err);
+      }
+    }
+
     async function hapusTargetTabungan(id, t) {
       if (!confirm("Hapus target \"" + t + "\"?")) return;
-      var q = supabase.from('tabungan').delete();
-      if (id && id !== 'null') q = q.eq('id', id); else q = q.eq('tujuan', t);
-      await q; showToast("Target dihapus!"); loadTabungan();
+      var url = SUPABASE_URL + "/rest/v1/tabungan";
+      if (id && id !== 'null') url += "?id=eq." + encodeURIComponent(id);
+      else url += "?tujuan=eq." + encodeURIComponent(t);
+
+      try {
+        var res = await fetch(url, {
+          method: "DELETE",
+          headers: supabaseHeaders
+        });
+        if (res.status === 200 || res.status === 204) {
+          showToast("Target tabungan dihapus!", "info");
+          loadTabungan();
+        } else {
+          var errData = await res.json().catch(function() { return null; });
+          var errMsg = formatSupabaseError(errData, res.status, res.statusText);
+          showToast("Gagal menghapus tabungan: " + errMsg, "error");
+        }
+      } catch (err) {
+        showToast("Kendala koneksi: " + err.message, "error");
+      }
     }
 
     // ----------------- CHART DOUGHNUT -----------------
